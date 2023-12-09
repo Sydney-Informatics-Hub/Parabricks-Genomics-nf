@@ -20,6 +20,7 @@ nextflow.enable.dsl=2
 // Import processes to be run in the workflow
 include { check_input_temp } from './modules/check_input_temp' 
 include { bwa_index } from './modules/bwa_index'
+include { pb_fq2bam } from './modules/pb_fq2bam'
 
 // Print a header upon execution 
 log.info """\
@@ -37,7 +38,7 @@ Workflow run parameters
 =======================================================================================
 input       : ${params.input}
 outdir      : ${params.outdir}
-fasta				: ${params.fasta}
+fasta       : ${params.fasta}
 workDir     : ${workflow.workDir}
 =======================================================================================
 
@@ -95,12 +96,18 @@ input = Channel.fromPath("${params.input}")
 		.map { row -> tuple(row.sample, file(row.fq1), file(row.fq2), row.platform, row.library, row.center)}
 
 // TODO make this work so we can validate inputs from samplesheet 
+// TODO will need to capture multiple fq input pairs per sample i.e. split across lanes  
+// TODO as per https://training.nextflow.io/advanced/grouping/ and https://github.sydney.edu.au/informatics/PIPE-4135-CMT_neurogenomics/blob/master/300_preprocessing/T2T-scripts/pb_fq2bam_make_input.sh 
+
 //input = Channel.fromPath("${params.input}")
 //		.splitCsv(header: true)
 //		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center)}
 
 // INDEX REFERENCE
 bwa_index(params.fasta)
+
+// ALIGN READS
+pb_fq2bam(input, params.fasta, bwa_index.out.fa_index)
 
 }}
 
