@@ -13,8 +13,8 @@ log.info """\
 Genomics001: Parabricks-Genomics-nf 
 =======================================================================================
 
-Created by <YOUR NAME> 
-Find documentation @ https://sydney-informatics-hub.github.io/Nextflow_DSL2_template_guide/
+Created by Georgie Samaha
+Find documentation @ https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf
 Cite this pipeline @ INSERT DOI
 
 =======================================================================================
