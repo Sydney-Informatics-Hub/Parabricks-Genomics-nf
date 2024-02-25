@@ -1,21 +1,5 @@
 #!/usr/bin/env nextflow
-
-/// To use DSL-2 will need to include this
 nextflow.enable.dsl=2
-
-// =================================================================
-// main.nf is the pipeline script for a nextflow pipeline
-// Should contain the following sections:
-	// Process definitions
-    // Channel definitions
-    // Workflow structure
-	// Workflow summary logs 
-
-// Examples are included for each section. Remove them and replace
-// with project-specific code. For more information see:
-// https://www.nextflow.io/docs/latest/index.html.
-//
-// ===================================================================
 
 // Import processes to be run in the workflow
 include { check_input_temp } from './modules/check_input_temp' 
@@ -38,7 +22,7 @@ Workflow run parameters
 =======================================================================================
 input       : ${params.input}
 outdir      : ${params.outdir}
-fasta       : ${params.fasta}
+ref       	: ${params.ref}
 workDir     : ${workflow.workDir}
 =======================================================================================
 
@@ -50,7 +34,7 @@ workDir     : ${workflow.workDir}
 
 def helpMessage() {
     log.info"""
-  Usage:  nextflow run main.nf --input <samples.tsv> 
+  Usage:  nextflow run main.nf --input <samples.tsv> --ref <reference.fasta>
 
   Required Arguments:
 
