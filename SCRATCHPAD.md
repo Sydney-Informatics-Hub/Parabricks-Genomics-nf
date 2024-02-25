@@ -9,3 +9,4 @@
 - Replaced fasta with ref 
 - Tested Parabricks fq2bam with ./bin/test-parabricks.sh, issue persists
 - Added functionality to input checker, now runs samplesheetchecker.py
+- Added if/else loop in main.nf to detect existing bwa indexes for reference.fa
