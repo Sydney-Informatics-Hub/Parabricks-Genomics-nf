@@ -5,8 +5,7 @@ process check_input {
 
     input:
 		path input
-		//tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center)
-
+    
     output:
     path 'samplesheet.csv' , emit: samplesheet
 
