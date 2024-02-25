@@ -2,9 +2,9 @@
 nextflow.enable.dsl=2
 
 // Import processes to be run in the workflow
-include { check_input_temp } from './modules/check_input_temp' 
+include { check_input } from './modules/check_input' 
 include { bwa_index } from './modules/bwa_index'
-include { pb_fq2bam } from './modules/pb_fq2bam'
+//include { pb_fq2bam } from './modules/pb_fq2bam'
 
 // Print a header upon execution 
 log.info """\
@@ -22,7 +22,7 @@ Workflow run parameters
 =======================================================================================
 input       : ${params.input}
 outdir      : ${params.outdir}
-ref       	: ${params.ref}
+ref         : ${params.ref}
 workDir     : ${workflow.workDir}
 =======================================================================================
 
@@ -34,7 +34,7 @@ workDir     : ${workflow.workDir}
 
 def helpMessage() {
     log.info"""
-  Usage:  nextflow run main.nf --input <samples.tsv> --ref <reference.fasta>
+  Usage:  nextflow run main.nf --input <samples.csv> --ref <reference.fasta> --gadi_account <project code>
 
   Required Arguments:
 
@@ -69,29 +69,32 @@ if ( params.help == true || params.input == false){
 // See https://www.nextflow.io/docs/latest/channel.html#channels
 // See https://training.nextflow.io/basic_training/channels/ 
 
-//fasta = Channel.value("${params.fasta}")
+//ref = Channel.value("${params.ref}")
 
 outdir = Channel.value("${params.outdir}")
 
-// VALIDATE INDEX 
-check_input_temp(Channel.fromPath(params.input, checkIfExists: true))
-input = Channel.fromPath("${params.input}")
+// CREATE FASTA INDEXES 
+def refFile = file(params.ref)
+def refDir = refFile.parent
+def refName = refFile.name
+
+// CHECK IF INDEXES EXIST
+if (!file("${refDir}/${refName}.bwt").exists()) {
+    // If the index file does not exist, run the bwa_index process
+    bwa_index(params.ref)
+} else {
+    log.info "BWA indexes already exist for ${params.ref}" 
+}
+
+// VALIDATE INPUT SAMPLES 
+check_input(Channel.fromPath(params.input, checkIfExists: true))
+samplesheet_out = check_input.out.samplesheet
 		.splitCsv(header: true)
-		.map { row -> tuple(row.sample, file(row.fq1), file(row.fq2), row.platform, row.library, row.center)}
-
-// TODO make this work so we can validate inputs from samplesheet 
-// TODO will need to capture multiple fq input pairs per sample i.e. split across lanes  
-// TODO as per https://training.nextflow.io/advanced/grouping/ and https://github.sydney.edu.au/informatics/PIPE-4135-CMT_neurogenomics/blob/master/300_preprocessing/T2T-scripts/pb_fq2bam_make_input.sh 
-
-//input = Channel.fromPath("${params.input}")
-//		.splitCsv(header: true)
-//		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center)}
-
-// INDEX REFERENCE
-bwa_index(params.fasta)
+		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
+    //.view()
 
 // ALIGN READS
-pb_fq2bam(input, params.fasta, bwa_index.out.fa_index)
+//pb_fq2bam(check_input.out.samplesheet, params.ref, bwa_index.out.fa_index)
 
 }}
 
