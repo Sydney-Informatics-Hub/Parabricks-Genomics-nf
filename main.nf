@@ -1,44 +1,28 @@
 #!/usr/bin/env nextflow
-
-/// To use DSL-2 will need to include this
 nextflow.enable.dsl=2
 
-// =================================================================
-// main.nf is the pipeline script for a nextflow pipeline
-// Should contain the following sections:
-	// Process definitions
-    // Channel definitions
-    // Workflow structure
-	// Workflow summary logs 
+// Import processes to be run in the workflow
+include { check_input } from './modules/check_input' 
+include { bwa_index } from './modules/bwa_index'
+//include { pb_fq2bam } from './modules/pb_fq2bam'
 
-// Examples are included for each section. Remove them and replace
-// with project-specific code. For more information see:
-// https://www.nextflow.io/docs/latest/index.html.
-//
-// ===================================================================
-
-// Import processes or subworkflows to be run in the workflow
-// Each of these is a separate .nf script saved in modules/ directory
-// See https://training.nextflow.io/basic_training/modules/#importing-modules 
-include { processOne } from './modules/process1'
-include { processTwo } from './modules/process2' 
-
-// Print a header for your pipeline 
+// Print a header upon execution 
 log.info """\
 
 =======================================================================================
-Name of the pipeline - nf 
+Genomics001: Parabricks-Genomics-nf 
 =======================================================================================
 
-Created by <YOUR NAME> 
-Find documentation @ https://sydney-informatics-hub.github.io/Nextflow_DSL2_template_guide/
+Created by Georgie Samaha
+Find documentation @ https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf
 Cite this pipeline @ INSERT DOI
 
 =======================================================================================
 Workflow run parameters 
 =======================================================================================
 input       : ${params.input}
-outDir      : ${params.outDir}
+outdir      : ${params.outdir}
+ref         : ${params.ref}
 workDir     : ${workflow.workDir}
 =======================================================================================
 
@@ -50,7 +34,7 @@ workDir     : ${workflow.workDir}
 
 def helpMessage() {
     log.info"""
-  Usage:  nextflow run main.nf --input <samples.tsv> 
+  Usage:  nextflow run main.nf --input <samples.csv> --ref <reference.fasta> --gadi_account <project code>
 
   Required Arguments:
 
@@ -59,7 +43,7 @@ def helpMessage() {
 
   Optional Arguments:
 
-  --outDir	Specify path to output directory. 
+  --outdir	Specify path to output directory. 
 	
 """.stripIndent()
 }
@@ -70,7 +54,7 @@ workflow {
 
 // Show help message if --help is run or (||) a required parameter (input) is not provided
 
-if ( params.help || params.input == false ){   
+if ( params.help == true || params.input == false){   
 // Invoke the help function above and exit
 	helpMessage()
 	exit 1
@@ -84,14 +68,34 @@ if ( params.help || params.input == false ){
 // Define channels 
 // See https://www.nextflow.io/docs/latest/channel.html#channels
 // See https://training.nextflow.io/basic_training/channels/ 
-	input = Channel.value("${params.input}")
 
-// Run process 1 
-// See https://training.nextflow.io/basic_training/processes/#inputs 
-	processOne(input)
-	
-// Run process 2 which takes output of process 1 
-	processTwo(processOne.out.File)
+//ref = Channel.value("${params.ref}")
+
+outdir = Channel.value("${params.outdir}")
+
+// CREATE FASTA INDEXES 
+def refFile = file(params.ref)
+def refDir = refFile.parent
+def refName = refFile.name
+
+// CHECK IF INDEXES EXIST
+if (!file("${refDir}/${refName}.bwt").exists()) {
+    // If the index file does not exist, run the bwa_index process
+    bwa_index(params.ref)
+} else {
+    log.info "BWA indexes already exist for ${params.ref}" 
+}
+
+// VALIDATE INPUT SAMPLES 
+check_input(Channel.fromPath(params.input, checkIfExists: true))
+samplesheet_out = check_input.out.samplesheet
+		.splitCsv(header: true)
+		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
+    //.view()
+
+// ALIGN READS
+//pb_fq2bam(check_input.out.samplesheet, params.ref, bwa_index.out.fa_index)
+
 }}
 
 // Print workflow execution summary 
@@ -105,7 +109,7 @@ Duration    : ${workflow.duration}
 Success     : ${workflow.success}
 workDir     : ${workflow.workDir}
 Exit status : ${workflow.exitStatus}
-outDir      : ${params.outDir}
+Output      : ${params.outdir}
 
 =======================================================================================
   """

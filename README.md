@@ -1,4 +1,9 @@
-# Pipeline name
+
+# Core workflow: Parabricks Germline Genomics 
+
+<p align="center">
+:wrench: This pipeline is currently under development :wrench:
+</p>
 
 ## Workflow description 
 
