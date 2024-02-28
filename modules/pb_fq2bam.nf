@@ -1,5 +1,5 @@
 process pb_fq2bam {
-    // TODO tag ""
+    tag "SAMPLE: ${sample}"
     // TODO label 
     module "parabricks"
 
@@ -10,7 +10,7 @@ process pb_fq2bam {
     stageInMode "copy"
 
     input:
-    tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center)
+    tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center), val(flowcell), val(lane) 
     path(fasta)
 		path(fa_index)
 
@@ -19,7 +19,7 @@ process pb_fq2bam {
     tuple val(sample), path("*.bai"), emit: bai
     path "qc_metrics", emit: qc_metrics
 		path "pbrun_fq2bam_log.txt", emit: fq2bam_log
-    path "duplicate-metrics.txt", emit: duplicate_metrics
+    path "duplicate_metrics.txt", emit: duplicate_metrics
 
     script:
 		def in_fq_command = "--in-fq $fq1 $fq2" 
@@ -39,7 +39,7 @@ process pb_fq2bam {
 			--bwa-options="-M" \\
 			--fix-mate \\
 			--optical-duplicate-pixel-distance 2500 \\
-			--logfile fq2bam_log.txt \\
+			--logfile pbrun_fq2bam_log.txt \\
 			$args
     """
 }

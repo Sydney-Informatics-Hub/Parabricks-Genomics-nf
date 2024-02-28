@@ -4,7 +4,7 @@ nextflow.enable.dsl=2
 // Import processes to be run in the workflow
 include { check_input } from './modules/check_input' 
 include { bwa_index } from './modules/bwa_index'
-//include { pb_fq2bam } from './modules/pb_fq2bam'
+include { pb_fq2bam } from './modules/pb_fq2bam'
 
 // Print a header upon execution 
 log.info """\
@@ -91,10 +91,10 @@ check_input(Channel.fromPath(params.input, checkIfExists: true))
 samplesheet_out = check_input.out.samplesheet
 		.splitCsv(header: true)
 		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
-    //.view()
+    //.view() 
 
 // ALIGN READS
-//pb_fq2bam(check_input.out.samplesheet, params.ref, bwa_index.out.fa_index)
+pb_fq2bam(samplesheet_out, params.ref, bwa_index.out.fa_index)
 
 }}
 
