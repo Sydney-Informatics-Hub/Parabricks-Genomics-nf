@@ -4,9 +4,11 @@
 Extracted 10,000 non-N lines on chr21 from /g/data/iz89/hg38_chromosomesOnly.fa 
 
 ```
-samtools faidx /g/data/iz89/reference/hg38/hg38_chromosomesOnly.fa chr21 > test/test_chr21.fa
-grep -v '^>' test/test_chr21.fa | grep -v 'N' | head 10000 > test_chr21.fa
+samtools faidx /g/data/iz89/reference/hg38/hg38_chromosomesOnly.fa chr21 > test/chr21.fa
+echo "> chr21_test" > test_chr21.fa
+grep -v '^>' test/chr21.fa | grep -v 'N' | head 10000 > test_chr21.fa
 mv test_chr21.fa test/
+rm test/chr21.fa
 ```
 
 ## PE fastqs
