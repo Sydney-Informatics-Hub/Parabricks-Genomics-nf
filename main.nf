@@ -101,69 +101,8 @@ align_in = check_input.out.samplesheet
         def lane = it[7]
         return[ sample, fq1, fq2, platform, library, center, flowcell, lane ]
       }
-    .groupTuple(by: [0,3,4,5,6,7]) // Group by sample, platform, library, center
-    .map { tuple ->
-        def sample = tuple[0]
-        def fq1 = tuple[1]
-        def fq2 = tuple[2]
-        def platform = tuple[3]
-        def library = tuple[4]
-        def center = tuple[5]
-        def flowcell = tuple[6]
-        def lane = tuple[7]
-        
-        // Check the number of fastq pairs
-        def numPairs = fq1 instanceof List ? fq1.size() : 1
-
-        // Create tuples with appropriate paths for each fastq pair
-        def outputTuples = []
-        for (int i = 0; i < numPairs; i++) {
-            def fq1Path = fq1 instanceof List ? fq1[i] : fq1
-            def fq2Path = fq2 instanceof List ? fq2[i] : fq2
-            outputTuples << [sample, fq1Path, fq2Path, platform, library, center, flowcell, lane]
-        }
-        return outputTuples
-    }
-    //.flatten()
+    .groupTuple(by: [0,3,4,5]) // Group by sample, platform, library, center
     .view()
-//log.info "align_in: ${align_in}"
-
-//pb_fq2bam(
-//    align_in.map { tuple ->
-//        def sample = tuple[0]
-//        def fq1 = tuple[1]
-//        def fq2 = tuple[2]
-//        def platform = tuple[3]
-//        def library = tuple[4]
-//        def center = tuple[5]
-//        def flowcell = tuple[6]
-//        def lane = tuple[7]
-
-        // Pass the extracted values to pb_fq2bam process
-//        return [sample, fq1, fq2, platform, library, center, flowcell, lane]
-//    },
-//    params.ref,
-//    bwa_index.out.fa_index
-//)
-
-
+    
+//pb_fq2bam(align_in, params.ref, bwa_index.out.fa_index)
 }}
-
-// Print workflow execution summary 
-workflow.onComplete {
-summary = """
-=======================================================================================
-Workflow execution summary
-=======================================================================================
-
-Duration    : ${workflow.duration}
-Success     : ${workflow.success}
-workDir     : ${workflow.workDir}
-Exit status : ${workflow.exitStatus}
-Output      : ${params.outdir}
-
-=======================================================================================
-  """
-println summary
-
-}
