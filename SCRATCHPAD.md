@@ -11,3 +11,9 @@
 - Added functionality to input checker, now runs samplesheetchecker.py
 - Added if/else loop in main.nf to detect existing bwa indexes for reference.fa
 - Added tags for check_input and bwa_index processes
+
+# 28.02.24
+
+- Resolved Parabricks error, was misleading. Actually formatting of fasta. Keep that in mind
+- Got parabricks with 1 fq pair working 
+- Working on running with fq input string to capture multiple fq pairs per sample  
