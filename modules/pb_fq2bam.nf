@@ -22,14 +22,15 @@ process pb_fq2bam {
     path "duplicate_metrics.txt", emit: duplicate_metrics
 
     script:
-		def in_fq_command = "--in-fq $fq1 $fq2" 
+    def in_fq_commands = inputTuples.collect { tuple -> "--in-fq ${tuple[1]} ${tuple[2]}" }.join(' ')
+        println "in_fq_commands: ${in_fq_commands}"
     def args = task.ext.args ?: ''
 		// TODO pass flowcell from fq1 header
 		// TODO pass lane from fq1 header
     """
 		pbrun fq2bam \\
 			--ref ${fasta} \\
-			--in-fq ${fq1} ${fq2} \\
+      ${in_fq_command} \\
 			--read-group-sm ${sample} \\
 			--read-group-lb ${library} \\
 			--read-group-pl ${platform} \\

@@ -68,9 +68,6 @@ if ( params.help == true || params.input == false){
 // Define channels 
 // See https://www.nextflow.io/docs/latest/channel.html#channels
 // See https://training.nextflow.io/basic_training/channels/ 
-
-//ref = Channel.value("${params.ref}")
-
 outdir = Channel.value("${params.outdir}")
 
 // CREATE FASTA INDEXES 
@@ -88,13 +85,67 @@ if (!file("${refDir}/${refName}.bwt").exists()) {
 
 // VALIDATE INPUT SAMPLES 
 check_input(Channel.fromPath(params.input, checkIfExists: true))
-samplesheet_out = check_input.out.samplesheet
-		.splitCsv(header: true)
-		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
-    //.view() 
 
 // ALIGN READS
-pb_fq2bam(samplesheet_out, params.ref, bwa_index.out.fa_index)
+align_in = check_input.out.samplesheet
+		.splitCsv(header: true)
+		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
+    .map{it -> 
+        def sample = it[0]
+        def fq1 = it[1]
+        def fq2 = it[2]
+        def platform = it[3]
+        def library = it[4]
+        def center = it[5]
+        def flowcell = it[6]
+        def lane = it[7]
+        return[ sample, fq1, fq2, platform, library, center, flowcell, lane ]
+      }
+    .groupTuple(by: [0,3,4,5,6,7]) // Group by sample, platform, library, center
+    .map { tuple ->
+        def sample = tuple[0]
+        def fq1 = tuple[1]
+        def fq2 = tuple[2]
+        def platform = tuple[3]
+        def library = tuple[4]
+        def center = tuple[5]
+        def flowcell = tuple[6]
+        def lane = tuple[7]
+        
+        // Check the number of fastq pairs
+        def numPairs = fq1 instanceof List ? fq1.size() : 1
+
+        // Create tuples with appropriate paths for each fastq pair
+        def outputTuples = []
+        for (int i = 0; i < numPairs; i++) {
+            def fq1Path = fq1 instanceof List ? fq1[i] : fq1
+            def fq2Path = fq2 instanceof List ? fq2[i] : fq2
+            outputTuples << [sample, fq1Path, fq2Path, platform, library, center, flowcell, lane]
+        }
+        return outputTuples
+    }
+    //.flatten()
+    .view()
+//log.info "align_in: ${align_in}"
+
+//pb_fq2bam(
+//    align_in.map { tuple ->
+//        def sample = tuple[0]
+//        def fq1 = tuple[1]
+//        def fq2 = tuple[2]
+//        def platform = tuple[3]
+//        def library = tuple[4]
+//        def center = tuple[5]
+//        def flowcell = tuple[6]
+//        def lane = tuple[7]
+
+        // Pass the extracted values to pb_fq2bam process
+//        return [sample, fq1, fq2, platform, library, center, flowcell, lane]
+//    },
+//    params.ref,
+//    bwa_index.out.fa_index
+//)
+
 
 }}
 
