@@ -10,37 +10,36 @@ process pb_fq2bam {
     stageInMode "copy"
 
     input:
-    tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center), val(flowcell), val(lane) 
-    path(fasta)
-		path(fa_index)
+    //tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center), val(flowcell), val(lane) 
+    tuple val(sample), val(fq_in_list), val(platform), val(library), val(center), val(flowcell), val(lane)
+    //path(fasta)
+		//path(fa_index)
 
-    output:
-    tuple val(sample), path("*.bam"), emit: bam
-    tuple val(sample), path("*.bai"), emit: bai
-    path "qc_metrics", emit: qc_metrics
-		path "pbrun_fq2bam_log.txt", emit: fq2bam_log
-    path "duplicate_metrics.txt", emit: duplicate_metrics
+    //output:
+    //tuple val(sample), path("*.bam"), emit: bam
+    //tuple val(sample), path("*.bai"), emit: bai
+    //path "qc_metrics", emit: qc_metrics
+		//path "pbrun_fq2bam_log.txt", emit: fq2bam_log
+    //path "duplicate_metrics.txt", emit: duplicate_metrics
 
     script:
-    def in_fq_commands = inputTuples.collect { tuple -> "--in-fq ${tuple[1]} ${tuple[2]}" }.join(' ')
-        println "in_fq_commands: ${in_fq_commands}"
     def args = task.ext.args ?: ''
 		// TODO pass flowcell from fq1 header
 		// TODO pass lane from fq1 header
-    """
-		pbrun fq2bam \\
-			--ref ${fasta} \\
-      ${in_fq_command} \\
-			--read-group-sm ${sample} \\
-			--read-group-lb ${library} \\
-			--read-group-pl ${platform} \\
-			--out-bam ${sample}_markdup.bam \\
-			--out-duplicate-metrics duplicate_metrics.txt \\
-			--out-qc-metrics-dir qc_metrics \\
-			--bwa-options="-M" \\
-			--fix-mate \\
-			--optical-duplicate-pixel-distance 2500 \\
-			--logfile pbrun_fq2bam_log.txt \\
-			$args
+        """
+        echo "pbrun fq2bam \\
+          --ref \\
+          ${in_fq} \\
+          --read-group-sm ${sample} \\
+          --read-group-lb ${library} \\
+          --read-group-pl ${platform} \\
+          --out-bam ${sample}_markdup.bam \\
+          --out-duplicate-metrics duplicate_metrics.txt \\
+          --out-qc-metrics-dir qc_metrics \\
+          --bwa-options="-M" \\
+          --fix-mate \\
+          --optical-duplicate-pixel-distance 2500 \\
+          --logfile pbrun_fq2bam_log.txt \\
+          $args"
     """
 }
