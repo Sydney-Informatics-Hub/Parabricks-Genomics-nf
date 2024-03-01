@@ -76,17 +76,18 @@ def refDir = refFile.parent
 def refName = refFile.name
 
 // CHECK IF INDEXES EXIST
-//if (!file("${refDir}/${refName}.bwt").exists()) {
+if (!file("${refDir}/${refName}.bwt").exists()) {
     // If the index file does not exist, run the bwa_index process
-//    bwa_index(params.ref)
-//} else {
-//    log.info "BWA indexes already exist for ${params.ref}" 
-//}
+    bwa_index(params.ref)
+} else {
+    log.info "BWA indexes already exist for ${params.ref}" 
+}
 
 // VALIDATE INPUT SAMPLES 
 check_input(Channel.fromPath(params.input, checkIfExists: true))
 
 // ALIGN READS
+// TODO dry this out, its very verbose because I don't understand Groovy
 align_in = check_input.out.samplesheet
   .splitCsv(header: true)
   .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
@@ -114,5 +115,5 @@ align_in = check_input.out.samplesheet
   .groupTuple(by:[0, 2, 3, 4, 5, 6])
   //.view()
 
-pb_fq2bam(align_in) //, params.ref, bwa_index.out.fa_index)
+pb_fq2bam(align_in, params.ref, bwa_index.out.fa_index)
 }}
