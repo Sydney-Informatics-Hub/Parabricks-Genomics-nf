@@ -24,12 +24,13 @@ process pb_fq2bam {
 
     script:
     def args = task.ext.args ?: ''
+    def fq_in_list = fq_in_list.join(' ')
 		// TODO pass flowcell from fq1 header
 		// TODO pass lane from fq1 header
         """
         echo "pbrun fq2bam \\
           --ref \\
-          ${in_fq} \\
+          ${fq_in_list} \\
           --read-group-sm ${sample} \\
           --read-group-lb ${library} \\
           --read-group-pl ${platform} \\

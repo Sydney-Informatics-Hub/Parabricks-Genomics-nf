@@ -112,7 +112,7 @@ align_in = check_input.out.samplesheet
     def lane = it[6]
     return [sample, fq_in_list, platform, library, center, flowcell, lane] } // Group by sample, platform, library, center
   .groupTuple(by:[0, 2, 3, 4, 5, 6])
-  .view()
+  //.view()
 
-//pb_fq2bam(align_in) //, params.ref, bwa_index.out.fa_index)
+pb_fq2bam(align_in) //, params.ref, bwa_index.out.fa_index)
 }}
