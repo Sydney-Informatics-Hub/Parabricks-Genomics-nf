@@ -4,7 +4,7 @@ nextflow.enable.dsl=2
 // Import processes to be run in the workflow
 include { check_input } from './modules/check_input' 
 include { bwa_index } from './modules/bwa_index'
-//include { pb_fq2bam } from './modules/pb_fq2bam'
+include { pb_fq2bam } from './modules/pb_fq2bam'
 
 // Print a header upon execution 
 log.info """\
@@ -68,9 +68,6 @@ if ( params.help == true || params.input == false){
 // Define channels 
 // See https://www.nextflow.io/docs/latest/channel.html#channels
 // See https://training.nextflow.io/basic_training/channels/ 
-
-//ref = Channel.value("${params.ref}")
-
 outdir = Channel.value("${params.outdir}")
 
 // CREATE FASTA INDEXES 
@@ -88,31 +85,35 @@ if (!file("${refDir}/${refName}.bwt").exists()) {
 
 // VALIDATE INPUT SAMPLES 
 check_input(Channel.fromPath(params.input, checkIfExists: true))
-samplesheet_out = check_input.out.samplesheet
-		.splitCsv(header: true)
-		.map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
-    //.view()
 
 // ALIGN READS
-//pb_fq2bam(check_input.out.samplesheet, params.ref, bwa_index.out.fa_index)
+// TODO dry this out, its very verbose because I don't understand Groovy
+align_in = check_input.out.samplesheet
+  .splitCsv(header: true)
+  .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
+  .map{it -> 
+    def sample = it[0]
+    def fq1 = it[1]
+    def fq2 = it[2]
+    def platform = it[3]
+    def library = it[4]
+    def center = it[5]
+    def flowcell = it[6]
+    def lane = it[7]
+    def fq_in = "--in-fq $fq1 $fq2"
+    return [sample, fq_in, platform, library, center, flowcell, lane]}
+  .groupTuple(by: [0, 2, 3, 4, 5, 6])
+  .map { it -> 
+    def sample = it[0]
+    def fq_in_list = it[1].join(' ')
+    def platform = it[2]
+    def library = it[3]
+    def center = it[4]
+    def flowcell = it[5]
+    def lane = it[6]
+    return [sample, fq_in_list, platform, library, center, flowcell, lane] } // Group by sample, platform, library, center
+  .groupTuple(by:[0, 2, 3, 4, 5, 6])
+  //.view()
 
+pb_fq2bam(align_in, params.ref, bwa_index.out.fa_index)
 }}
-
-// Print workflow execution summary 
-workflow.onComplete {
-summary = """
-=======================================================================================
-Workflow execution summary
-=======================================================================================
-
-Duration    : ${workflow.duration}
-Success     : ${workflow.success}
-workDir     : ${workflow.workDir}
-Exit status : ${workflow.exitStatus}
-Output      : ${params.outdir}
-
-=======================================================================================
-  """
-println summary
-
-}
