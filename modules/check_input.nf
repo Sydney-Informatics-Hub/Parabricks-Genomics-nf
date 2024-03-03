@@ -1,6 +1,5 @@
 process check_input {
     tag "INPUT: ${input.fileName}"
-    // TODO label 
     container 'https://depot.galaxyproject.org/singularity/python:3.8.3'
 
     input:
