@@ -7,6 +7,7 @@ include { bwa_index } from './modules/bwa_index'
 include { pb_fq2bam } from './modules/pb_fq2bam'
 include { pb_deepvariant } from './modules/pb_deepvar'
 include { glnexus_joint_call } from './modules/glnexus_joint'
+include { bcftools_convert } from './modules/convert_vcf'
 
 // Print a header upon execution 
 log.info """\
@@ -132,4 +133,7 @@ gvcf_list = pb_deepvariant.out.gvcf
   //.view()
 
 glnexus_joint_call(gvcf_list)
+
+// CONVERT BCF TO VCF
+bcftools_convert(glnexus_joint_call.out.cohort_bcf)
 }}
