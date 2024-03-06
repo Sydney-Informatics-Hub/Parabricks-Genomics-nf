@@ -21,3 +21,7 @@
 # 04.03.24
 - Working deepvariant command
 - Adding extract pass with bcftools as per [previous execution](https://github.sydney.edu.au/informatics/PIPE-4135-CMT_neurogenomics/blob/master/300_preprocessing/T2T-scripts/pb_deepvariant.sh)
+
+# 06.03.24
+- Functioning glnexus joint genotyping on all variants, not just PASS - should this work on PASS sites only? Shouldn't matter. 
+- TODO extracting PASS variants as per [Deepvariant](https://github.com/google/deepvariant/issues/278) filtering? 
