@@ -14,6 +14,10 @@
 
 # 28.02.24
 
-- Resolved Parabricks error, was misleading. Actually formatting of fasta. Keep that in mind
+- Resolved Parabricks memory error, was misleading. Actually formatting of fasta. Keep that in mind.
 - Got parabricks with 1 fq pair working 
-- Working on running with fq input string to capture multiple fq pairs per sample  
+- Finalised parabricks fq2bam process, runs for as many fq pairs per sample
+
+# 04.03.24
+- Working deepvariant command
+- Adding extract pass with bcftools as per [previous execution](https://github.sydney.edu.au/informatics/PIPE-4135-CMT_neurogenomics/blob/master/300_preprocessing/T2T-scripts/pb_deepvariant.sh)

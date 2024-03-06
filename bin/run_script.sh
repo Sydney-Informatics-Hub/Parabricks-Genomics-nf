@@ -16,4 +16,4 @@ module load singularity
 nextflow run main.nf \
     --ref $ref \
     --input $input \
-    --outdir test -resume
+    --outdir results -resume
