@@ -5,6 +5,7 @@ nextflow.enable.dsl=2
 include { check_input } from './modules/check_input' 
 include { bwa_index } from './modules/bwa_index'
 include { pb_fq2bam } from './modules/pb_fq2bam'
+include { pb_deepvariant } from './modules/pb_deepvar'
 
 // Print a header upon execution 
 log.info """\
@@ -116,4 +117,7 @@ align_in = check_input.out.samplesheet
   //.view()
 
 pb_fq2bam(align_in, params.ref, bwa_index.out.fa_index)
+
+// CALL VARIANTS
+pb_deepvariant(pb_fq2bam.out.bam, params.ref, bwa_index.out.fa_index)
 }}
