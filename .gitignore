@@ -1,4 +1,5 @@
 .nextflow*
+.vscode/
 results/
 work/
 test/test_out
