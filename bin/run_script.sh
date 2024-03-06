@@ -15,5 +15,6 @@ module load singularity
 
 nextflow run main.nf \
     --ref $ref \
+    --cohort_name test_samples \
     --input $input \
     --outdir results -resume
