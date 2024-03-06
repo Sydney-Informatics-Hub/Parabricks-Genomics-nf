@@ -6,6 +6,7 @@ include { check_input } from './modules/check_input'
 include { bwa_index } from './modules/bwa_index'
 include { pb_fq2bam } from './modules/pb_fq2bam'
 include { pb_deepvariant } from './modules/pb_deepvar'
+include { glnexus_joint_call } from './modules/glnexus_joint'
 
 // Print a header upon execution 
 log.info """\
@@ -120,4 +121,15 @@ pb_fq2bam(align_in, params.ref, bwa_index.out.fa_index)
 
 // CALL VARIANTS
 pb_deepvariant(pb_fq2bam.out.bam, params.ref, bwa_index.out.fa_index)
+
+// JOINT GENOTYPE VARIANTS FOR COHORT
+gvcf_list = pb_deepvariant.out.gvcf
+  .map{it -> 
+    def sample = it[0]
+    def gvcf = it[1]
+    return [gvcf] }
+  .collect()
+  //.view()
+
+glnexus_joint_call(gvcf_list)
 }}
