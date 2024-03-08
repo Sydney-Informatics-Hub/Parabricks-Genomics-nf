@@ -5,6 +5,7 @@ nextflow.enable.dsl=2
 include { check_input } from './modules/check_input' 
 include { bwa_index } from './modules/bwa_index'
 include { pb_fq2bam } from './modules/pb_fq2bam'
+include { pb_collectmetrics } from './modules/pb_collectmetrics'
 include { pb_deepvariant } from './modules/pb_deepvar'
 include { glnexus_joint_call } from './modules/glnexus_joint'
 include { bcftools_convert } from './modules/convert_vcf'
@@ -120,6 +121,9 @@ align_in = check_input.out.samplesheet
 
 pb_fq2bam(align_in, params.ref, bwa_index.out.fa_index)
 
+// QC ALIGNMENTS 
+pb_collectmetrics(pb_fq2bam.out.bam, params.ref, bwa_index.out.fa_index)
+
 // CALL VARIANTS
 pb_deepvariant(pb_fq2bam.out.bam, params.ref, bwa_index.out.fa_index)
 
@@ -136,4 +140,5 @@ glnexus_joint_call(gvcf_list)
 
 // CONVERT BCF TO VCF
 bcftools_convert(glnexus_joint_call.out.cohort_bcf)
+
 }}
