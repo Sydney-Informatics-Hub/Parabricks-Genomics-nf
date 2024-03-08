@@ -9,6 +9,7 @@ include { pb_collectmetrics } from './modules/pb_collectmetrics'
 include { pb_deepvariant } from './modules/pb_deepvar'
 include { glnexus_joint_call } from './modules/glnexus_joint'
 include { bcftools_convert } from './modules/convert_vcf'
+include { annotate_vep } from './modules/annotate_vcf'
 
 // Print a header upon execution 
 log.info """\
@@ -87,6 +88,15 @@ if (!file("${refDir}/${refName}.bwt").exists()) {
     log.info "BWA indexes already exist for ${params.ref}" 
 }
 
+// TODO DOWNLOAD VEP CACHE IF SPECIFIED
+// TODO CURRENTLY NOT WORKING WITH CONTAINER, DON'T HAVE TIME TO UNDERSTAND WHAT IS GOING WRONG 
+//if (params.vep_species == true && params.vep_assembly == true || file("${params.outdir}/variants/vep_cache").exists()) {
+    // If VEP parameters are specified then download cache 
+//download_vep(params.vep_species, params.vep_assembly)
+//} else {
+//    log.info "VEP details not specified, skipping annotation"
+//}
+
 // VALIDATE INPUT SAMPLES 
 check_input(Channel.fromPath(params.input, checkIfExists: true))
 
@@ -140,5 +150,8 @@ glnexus_joint_call(gvcf_list)
 
 // CONVERT BCF TO VCF
 bcftools_convert(glnexus_joint_call.out.cohort_bcf)
+
+// ANNOTATE COHORT VCF WITH VEP 
+annotate_vep(bcftools_convert.out.cohort_vcf, bcftools_convert.out.cohort_vcf_tbi, params.vep_genome, params.vep_assembly, params.vep_cache)
 
 }}

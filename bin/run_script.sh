@@ -9,6 +9,8 @@
 
 ref=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/test_chr21.fa
 input=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/multipair_samples.csv
+vep_species=homo_sapiens
+vep_assembly=GRCh38 
 
 module load nextflow
 module load singularity
@@ -16,5 +18,7 @@ module load singularity
 nextflow run main.nf \
     --ref $ref \
     --cohort_name test_samples \
+    --vep_species $vep_species \
+    --vep_assembly $vep_assembly \
     --input $input \
     --outdir results -resume
