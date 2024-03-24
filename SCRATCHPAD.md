@@ -31,3 +31,8 @@
 - BCF to VCF conversion complete 
 - TODO VEP annotations process. Downloading the cache via a container and nf process is proving tricky
 - TODO VEP annotation process needs a pre-downloaded cache, ew  
+- Download with curl takes > 2 hours 23.3G (need to do in copyq with `bin/download_VEP.sh`)
+
+# 22.03.24
+- Inflexible GRCH38-specific method for autodownload of VEP cache implemented 
+- For other species, can run by providing own cache 
