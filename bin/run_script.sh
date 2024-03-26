@@ -11,7 +11,7 @@ ref=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/test_chr21.fa
 input=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/multipair_samples.csv
 vep_species=homo_sapiens
 vep_assembly=GRCh38
-vep_cachedir=/scratch/er01/gs5517/workflowDev/VEP/test-script
+vep_cachedir=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/VEPcache
 
 module load nextflow
 module load singularity
