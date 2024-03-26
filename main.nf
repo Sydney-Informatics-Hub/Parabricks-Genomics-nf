@@ -10,7 +10,7 @@ include { pb_deepvariant } from './modules/pb_deepvar'
 include { glnexus_joint_call } from './modules/glnexus_joint'
 include { bcftools_convert } from './modules/convert_vcf'
 include { download_vep } from './modules/download_vep'
-//include { annotate_vep } from './modules/annotate_vcf'
+include { annotate_vcf } from './modules/annotate_vcf'
 
 // Print a header upon execution 
 log.info """\
@@ -152,18 +152,20 @@ glnexus_joint_call(gvcf_list)
 // CONVERT BCF TO VCF
 bcftools_convert(glnexus_joint_call.out.cohort_bcf)
 
-// DOWNLOAD HUMAN VEP CACHE - ! GRCH38 ONLY !
-if (params.vep_species == "homo_sapiens"){   
-	download_vep() 
-  //annotate_vcf()
+// DOWNLOAD VEP CACHE 
+if (params.download_vep_cache){   
+	download_vep(params.vep_assembly, params.vep_species, params.vep_cachedir) 
 }
 
-// OR RUN VEP ON USER-PROVIDED DOWNLOADED CACHE 
-//if (params.vep_cache == true){
-//  annotate_vcf()
-//}
-
 // ANNOTATE COHORT VCF WITH VEP CACHE
-//annotate_vep(bcftools_convert.out.cohort_vcf, bcftools_convert.out.cohort_vcf_tbi, params.vep_genome, params.vep_assembly, params.vep_cache)
+if (params.vep_cachedir) {
+  annotate_vcf(params.cohort_name, 
+              bcftools_convert.out.cohort_vcf, 
+              bcftools_convert.out.cohort_vcf_tbi,  
+              params.vep_assembly, 
+              params.vep_species,
+              params.vep_cachedir)
+
+}
 
 }}

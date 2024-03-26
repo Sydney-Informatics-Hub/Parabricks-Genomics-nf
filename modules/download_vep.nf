@@ -9,7 +9,7 @@ process download_vep {
     path(vep_cachedir)
 
     output:
-    // TODO tidy this. Bit buggy, have added optional to avoid error 
+    // TODO tidy this. Bit buggy, have added optional to avoid error but that's risky 
     path("${params.vep_species}/*"), emit: vep_cache, optional: true
     
     script:
