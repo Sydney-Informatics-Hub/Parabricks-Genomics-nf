@@ -1,24 +1,23 @@
 process download_vep {
-    tag "DOWNLOADING_CACHE: ${params.vep_species} ${params.vep_assembly}" 
+    tag "DOWNLOADING_CACHE: ${params.vep_species} - ${params.vep_assembly}" 
     publishDir "${params.outdir}/VEP_cache", mode: 'symlink'
     container 'quay.io/lifebitaiorg/vep-nf:v110.1' 
 
     input: 
     val(vep_assembly)
     val(vep_species)
-    path(vep_cachedir)
 
     output:
-    // TODO tidy this. Bit buggy, have added optional to avoid error but that's risky 
-    path("${params.vep_species}/*"), emit: vep_cache, optional: true
+    // TODO fix this, have added optional to avoid error but that's risky 
+    path("vep_cache"), emit: cache, optional: true
     
     script:
     // TODO if performance is buggy, consider using Globus: https://github.com/Ensembl/ensembl-vep/issues/936 
     """
-    INSTALL.pl INSTALL.pl \
+    INSTALL.pl \
       --AUTO cf \
       --SPECIES "${params.vep_species}" \
       --ASSEMBLY "${params.vep_assembly}" \
-      --CACHEDIR ${params.vep_cachedir}
+      --CACHEDIR vep_cache
     """
 }

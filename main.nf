@@ -29,6 +29,9 @@ Workflow run parameters
 input       : ${params.input}
 outdir      : ${params.outdir}
 ref         : ${params.ref}
+cohort      : ${params.cohort_name}
+vep_species : ${params.vep_species}
+vep_assembly: ${params.vep_assembly}
 workDir     : ${workflow.workDir}
 =======================================================================================
 
@@ -152,20 +155,18 @@ glnexus_joint_call(gvcf_list)
 // CONVERT BCF TO VCF
 bcftools_convert(glnexus_joint_call.out.cohort_bcf)
 
-// DOWNLOAD VEP CACHE 
-if (params.download_vep_cache){   
-	download_vep(params.vep_assembly, params.vep_species, params.vep_cachedir) 
-}
+// DOWNLOAD VEP CACHE AND ANNOTATE WITH DOWNLOADED CACHE
+if (params.download_vep_cache){
 
-// ANNOTATE COHORT VCF WITH VEP CACHE
-if (params.vep_cachedir) {
+	download_vep(params.vep_assembly, params.vep_species) 
   annotate_vcf(params.cohort_name, 
               bcftools_convert.out.cohort_vcf, 
               bcftools_convert.out.cohort_vcf_tbi,  
               params.vep_assembly, 
               params.vep_species,
-              params.vep_cachedir)
-
+              download_vep.out.cache)
 }
+
+// SUMMARISE RUN WITH MULTIQC REPORT
 
 }}
