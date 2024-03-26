@@ -2,4 +2,6 @@
 .vscode/
 results/
 work/
-test/test_out
+test/vep/
+bin/*.o
+bin/*.e

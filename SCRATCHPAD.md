@@ -24,4 +24,15 @@
 
 # 06.03.24
 - Functioning glnexus joint genotyping on all variants, not just PASS - should this work on PASS sites only? Shouldn't matter. 
-- TODO extracting PASS variants as per [Deepvariant](https://github.com/google/deepvariant/issues/278) filtering? 
+- Not extracting PASS variants as per [Deepvariant](https://github.com/google/deepvariant/issues/278) filtering
+
+# 08.03.24
+- Variant calling, joint genotyping complete 
+- BCF to VCF conversion complete 
+- TODO VEP annotations process. Downloading the cache via a container and nf process is proving tricky
+- TODO VEP annotation process needs a pre-downloaded cache, ew  
+- Download with curl takes > 2 hours 23.3G (need to do in copyq with `bin/download_VEP.sh`)
+
+# 22.03.24
+- Inflexible GRCH38-specific method for autodownload of VEP cache implemented 
+- For other species, can run by providing own cache 
