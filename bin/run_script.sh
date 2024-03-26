@@ -10,15 +10,18 @@
 ref=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/test_chr21.fa
 input=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/multipair_samples.csv
 vep_species=homo_sapiens
-vep_assembly=GRCh38 
+vep_assembly=GRCh38
+vep_cachedir=/scratch/er01/gs5517/workflowDev/VEP/test-script
 
 module load nextflow
 module load singularity
 
 nextflow run main.nf \
-    --ref $ref \
-    --cohort_name test_samples \
-    --vep_species $vep_species \
-    --vep_assembly $vep_assembly \
-    --input $input \
+    --ref ${ref} \
+    --download_vep_cache \
+    --vep_cachedir ${vep_cachedir} \
+    --vep_assembly ${vep_assembly} \
+    --vep_species ${vep_species} \
+    --input ${input} \
+    --cohort_name myname \
     --outdir results -resume
