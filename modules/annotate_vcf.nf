@@ -12,19 +12,20 @@ process annotate_vcf {
     path(vep_cache)
 
     output:
-    path("*"), optional: true
-    //path("${params.cohort_name}.vcf.gz"), emit: cohort_vcf
-    //path("${params.cohort_name}.vcf.gz.tbi"), emit: cohort_vcf_tbi
-    
+    path("${params.cohort_name}_annotated.gz"), emit: vep_annotations
+    path("${params.cohort_name}_annotated.gz_warnings.txt"), emit: vep_warnings
+    path("${params.cohort_name}_annotated.gz_summary.html"), emit: vep_report
+
     script:
     def args = task.ext.args ?: ''
     """
     vep -i ${params.cohort_name}.vcf.gz \
-        -o ${params.cohort_name}_VEP.gz \
+        -o ${params.cohort_name}_annotated.gz \
         $args \
         --assembly ${params.vep_assembly} \
         --species ${params.vep_species} \
         --cache ${params.vep_cachedir} \
+        --compress_output bgzip \
         --fork ${task.cpus} 
     """
 }
