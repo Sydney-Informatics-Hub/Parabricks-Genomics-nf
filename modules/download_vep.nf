@@ -15,7 +15,7 @@ process download_vep {
     script:
     // TODO if performance is buggy, consider using Globus: https://github.com/Ensembl/ensembl-vep/issues/936 
     """
-    INSTALL.pl --CACHEDIR /scratch/er01/gs5517/workflowDev/VEP/ INSTALL.pl \
+    INSTALL.pl INSTALL.pl \
       --AUTO cf \
       --SPECIES "${params.vep_species}" \
       --ASSEMBLY "${params.vep_assembly}" \
