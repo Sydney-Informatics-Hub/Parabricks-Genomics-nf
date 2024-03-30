@@ -10,8 +10,8 @@ process pb_collectmetrics {
     path(fa_index)
 
     output:
-    tuple val(sample), path("*.bam_metrics.txt"), emit: bam_metrics
-    tuple val(sample), path("*_collectBamMetrics_log.txt"), emit: metrics_logs
+    path("*.bam_metrics.txt"), emit: bam_metrics
+    path("*_collectBamMetrics_log.txt"), emit: metrics_logs
     
     script:
     def args = task.ext.args ?: ''

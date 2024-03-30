@@ -1,6 +1,5 @@
 process bwa_index {
     tag "FASTA: ${ref.fileName}"
-		publishDir "${params.outdir}/bwa_index", mode: 'symlink'
     container 'quay.io/biocontainers/bwa:0.7.17--he4a0461_11'
 
     input:
@@ -15,6 +14,5 @@ process bwa_index {
     bwa index \\
     $args \\
     $ref
-        
     """
 }
