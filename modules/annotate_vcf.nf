@@ -1,5 +1,5 @@
 process annotate_vcf {
-    tag "ANNOTATING: ${params.cohort_name}" 
+    tag "COHORT: ${params.cohort_name}" 
     publishDir "${params.outdir}/annotations", mode: 'symlink'
     container 'quay.io/lifebitaiorg/vep-nf:v110.1' 
 

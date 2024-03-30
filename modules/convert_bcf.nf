@@ -1,5 +1,5 @@
 process bcftools_convert {
-    tag "JOINT GENOTYPING: ${params.cohort_name}" 
+    tag "COHORT: ${params.cohort_name}" 
     publishDir "${params.outdir}/variants", mode: 'symlink'
     container "quay.io/biocontainers/bcftools:1.17--h3cc50cf_1"
 

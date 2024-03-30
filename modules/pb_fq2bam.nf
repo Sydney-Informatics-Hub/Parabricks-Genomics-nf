@@ -11,7 +11,9 @@ process pb_fq2bam {
 
     output:
     tuple val(sample), path("*.bam"), path("*.bai"), emit: bam
-    tuple val(sample), path("*_qc_metrics"), path("*_pbrun_fq2bam_log.txt"), path("*_duplicate_metrics.txt"), emit: metrics_logs
+    path("*_qc_metrics"), emit: qc_metrics
+    path("*_pbrun_fq2bam_log.txt"), emit: metrics_logs
+    path("*_duplicate_metrics.txt"), emit: duplicate_metrics
     
     script:
     def args = task.ext.args ?: ''
