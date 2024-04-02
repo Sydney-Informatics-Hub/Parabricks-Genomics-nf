@@ -21,6 +21,7 @@ process pb_collectmetrics {
       --bam ${bam} \\
       --out-metrics-file ${sample}.bam_metrics.txt \\
       --logfile ${sample}_collectBamMetrics_log.txt \\
+      --num-threads ${task.cpus} \\
       $args
     """
 }
