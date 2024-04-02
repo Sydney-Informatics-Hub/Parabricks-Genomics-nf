@@ -24,7 +24,7 @@ process annotate_vcf {
         $args \
         --assembly ${params.vep_assembly} \
         --species ${params.vep_species} \
-        --cache \
+        --cache --offline \
         --dir_cache vep_cache \
         --compress_output bgzip \
         --fork ${task.cpus} 

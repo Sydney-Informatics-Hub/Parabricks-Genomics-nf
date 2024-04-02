@@ -24,4 +24,8 @@ nextflow run main.nf \
     --vep_species ${vep_species} \
     --input ${input} \
     --cohort_name myname \
-    --outdir results -resume
+    --outdir results \
+    --gadi_account iz89 \
+    --storage_account er01 \
+    --whoami gs5517 \
+    -resume -profile gadi
