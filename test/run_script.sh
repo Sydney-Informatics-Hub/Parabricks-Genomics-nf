@@ -7,11 +7,11 @@
 ## RUN THIS SCRIPT FROM THE Parabricks-Genomics-nf DIRECTORY WITH:
 ## bash bin/run_script.sh
 
-ref=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/test_chr21.fa
-input=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/multipair_samples.csv
+ref=<path>/Parabricks-Genomics-nf/test/test_chr21.fa
+input=<path>/Parabricks-Genomics-nf/test/multipair_samples.csv
 vep_species=homo_sapiens
 vep_assembly=GRCh38
-vep_cachedir=/scratch/er01/gs5517/workflowDev/Parabricks-Genomics-nf/test/VEPcache
+vep_cachedir=<path>/Parabricks-Genomics-nf/test/VEPcache
 
 module load nextflow
 module load singularity
@@ -23,9 +23,9 @@ nextflow run main.nf \
     --vep_assembly ${vep_assembly} \
     --vep_species ${vep_species} \
     --input ${input} \
-    --cohort_name test-300424 \
-    --outdir test-300424 \
-    --gadi_account iz89 \
-    --storage_account er01 \
+    --cohort_name test \
+    --outdir test \
+    --gadi_account <ACCOUNT> \
+    --storage_account <ACCOUNT> \
     --whoami $(whoami) \
     -resume -profile gadi
