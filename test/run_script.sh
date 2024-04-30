@@ -12,6 +12,8 @@ input=<path>/Parabricks-Genomics-nf/test/multipair_samples.csv
 vep_species=homo_sapiens
 vep_assembly=GRCh38
 vep_cachedir=<path>/Parabricks-Genomics-nf/test/VEPcache
+gadi_account=<ACCOUNT>
+storage_account=<ACCOUNT>
 
 module load nextflow
 module load singularity
@@ -25,7 +27,7 @@ nextflow run main.nf \
     --input ${input} \
     --cohort_name test \
     --outdir test \
-    --gadi_account <ACCOUNT> \
-    --storage_account <ACCOUNT> \
+    --gadi_account ${gadi_account} \
+    --storage_account ${storage_account} \
     --whoami $(whoami) \
     -resume -profile gadi
