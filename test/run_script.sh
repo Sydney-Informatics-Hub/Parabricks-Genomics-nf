@@ -2,7 +2,7 @@
 
 #### THIS IS A TESTING SCRIPT #####
 ## FOR LOCAL TESTING, BEFORE RUNNING THIS SCRIPT, ENTER A INTERACTIVE JOB WITH:  
-## qsub -I -Piz89 -qgpuvolta -lncpus=24,ngpus=2,mem=380GB,storage=scratch/er01 
+## qsub -I -P<project> -qgpuvolta -lncpus=24,ngpus=2,mem=380GB,storage=scratch/<project>
 
 ## RUN THIS SCRIPT FROM THE Parabricks-Genomics-nf DIRECTORY WITH:
 ## bash bin/run_script.sh
@@ -23,9 +23,9 @@ nextflow run main.nf \
     --vep_assembly ${vep_assembly} \
     --vep_species ${vep_species} \
     --input ${input} \
-    --cohort_name myname \
-    --outdir results \
+    --cohort_name test-300424 \
+    --outdir test-300424 \
     --gadi_account iz89 \
     --storage_account er01 \
-    --whoami gs5517 \
+    --whoami $(whoami) \
     -resume -profile gadi
