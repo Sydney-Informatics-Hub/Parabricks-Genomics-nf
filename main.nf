@@ -50,13 +50,24 @@ def helpMessage() {
 
   Required Arguments:
 
-  --input	Specify full path and name of sample
-		input file (tab separated).
+  --input	              Specify full path and name of sample input file (tab separated).
+
+  --ref	                Specify full path and name of reference genome (FASTA format).
+
+  --gadi_account	      Specify NCI Gadi project code for accounting and storage.
 
   Optional Arguments:
 
-  --outdir	Specify path to output directory. 
-	
+  --outdir	            Specify path to output directory. 
+
+  --storage_account	    Specify NCI Gadi project code for storage in addition to gadi_account. 
+
+  --download_vep_cache  Download the required cache (default: false).
+
+  --vep_species         Specify which species cache to download from VEP (default: false).        
+
+  --vep_assembly        Specify which assembly cache to download from VEP (default: false).   
+
 """.stripIndent()
 }
 
