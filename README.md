@@ -248,9 +248,21 @@ This download speed for this process can be a bit inconsistent and is dependent 
 
 Submit an issue to get in contact with us regarding:
 
-* [Unexpected performance/bugs in the code]()
-* [Requesting a new feature]()
-* [General troubleshooting]()
+* [Unexpected performance/bugs in the code](https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml)
+* [Requesting a new feature](https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml)
+* [General support](https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf/issues/new)
 
 ## Acknowledgements/citations/credits
 
+Acknowledgements (and co-authorship, where appropriate) are an important way for us to demonstrate the value we bring to your research. Your research outcomes are vital for ongoing funding of the Sydney Informatics Hub and national compute facilities.
+
+### **Authors**
+* Georgina Samaha (Sydney Informatics Hub, University of Sydney)
+* Cali Willet (Sydney Informatics Hub, University of Sydney)
+
+### **Suggested acknowledgement**  
+The authors acknowledge the support provided by the Sydney Informatics Hub, a Core Research Facility of the University of Sydney. This research/project was undertaken with the assistance of resources and services from the National Computational Infrastructure (NCI), which is supported by the Australian Government, and the Australian BioCommons which is enabled by NCRIS via Bioplatforms Australia funding.
+
+### Cite us to support us! 
+
+Samaha, G. Willet, C. (2024). Parabricks-Genomics-nf [Computer software] https://doi.org/10.48546/WORKFLOWHUB.WORKFLOW.836.1
