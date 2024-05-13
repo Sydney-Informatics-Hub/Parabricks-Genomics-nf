@@ -1,10 +1,6 @@
 
 # Core workflow: Parabricks Germline Genomics 
 
-<p align="center">
-:wrench: This pipeline is currently under development :wrench:
-</p>
-
 ## Description 
 
 Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/4.2.0/index.html) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. 
@@ -15,7 +11,7 @@ DeepVariant and GLnexus have been shown to outperform GATK's HaplotypeCaller and
 
 Users intending to use this pipeline for non-human species should consider the findings of this [post](https://google.github.io/deepvariant/posts/2018-12-05-improved-non-human-variant-calling-using-species-specific-deepvariant-models/) regarding Mendelian violation rate to determine if this pipeline meets their needs. GLnexus is a scalable joint genotyper that can merge gVCFs from multiple samples and call variants in a single step. Please submit a [TODO feature request issue]() on this repository to request support for non-human species.  
 
-![TODO workflow diagram]()
+![](assets/parabricks-genomics-flowchart.png)
 
 ## User guide (NCI Gadi HPC only)
 
