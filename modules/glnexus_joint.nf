@@ -1,7 +1,7 @@
 process glnexus_joint_call {
     tag "JOINT GENOTYPING: ${params.cohort_name}" 
     publishDir "${params.outdir}/variants", mode: 'symlink'
-    container "quay.io/biocontainers/glnexus:1.4.1--h5c1b0a6_3"
+    container "ghcr.io/dnanexus-rnd/glnexus:v1.4.1"
 
     input:
     path(gvcf_list) 
