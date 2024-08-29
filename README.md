@@ -1,5 +1,5 @@
 
-# Core workflow: Parabricks Germline Genomics 
+# Parabricks Germline Genomics 
 
 ## Description 
 
