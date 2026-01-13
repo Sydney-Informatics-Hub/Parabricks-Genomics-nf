@@ -1,8 +1,7 @@
 process pb_deepvariant {
     tag "SAMPLE: ${sample}" 
     publishDir "${params.outdir}/variants/${sample}", mode: 'symlink'
-    module "parabricks"
-    stageInMode "copy" //Parabricks requires the files to be non-symlinked
+    label "parabricks"
 
     input:
     tuple val(sample), path(bam), path(bai) 
