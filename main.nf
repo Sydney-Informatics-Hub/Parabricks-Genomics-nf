@@ -18,25 +18,25 @@ include { multiqc } from './modules/multiqc'
 // Print a header upon execution 
 log.info """\
 
-=======================================================================================
+\033[1m\033[36m=======================================================================================
 Genomics001: Parabricks-Genomics-nf 
-=======================================================================================
+=======================================================================================\033[0m
 
-Created by Georgie Samaha
-Find documentation @ https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf
-Cite this pipeline @ INSERT DOI
+\033[35mCreated by Georgie Samaha\033[0m
+\033[35mFind documentation @ https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf\033[0m
+\033[35mCite this pipeline @ INSERT DOI\033[0m
 
-=======================================================================================
+\033[1m\033[33m=======================================================================================
 Workflow run parameters 
-=======================================================================================
-input_samples : ${params.input}
-cohort_name   : ${params.cohort_name}
-results_dir   : ${params.outdir}
-reference     : ${params.ref}
-vep_species   : ${params.vep_species}
-vep_assembly  : ${params.vep_assembly}
-workDir       : ${workflow.workDir}
-=======================================================================================
+=======================================================================================\033[0m
+\033[32minput_samples\033[0m : ${params.input}
+\033[32mcohort_name\033[0m   : ${params.cohort_name}
+\033[32mresults_dir\033[0m   : ${params.outdir}
+\033[32mreference\033[0m     : ${params.ref}
+\033[32mvep_species\033[0m   : ${params.vep_species}
+\033[32mvep_assembly\033[0m  : ${params.vep_assembly}
+\033[32mworkDir\033[0m       : ${workflow.workDir}
+\033[1m\033[33m=======================================================================================\033[0m
 
 """
 
@@ -46,27 +46,29 @@ workDir       : ${workflow.workDir}
 
 def helpMessage() {
     log.info"""
-  Usage:  nextflow run main.nf --input <samples.csv> --ref <reference.fasta> --gadi_account <project code>
+  \033[1m\033[36mUsage:\033[0m  nextflow run main.nf --input <samples.csv> --ref <reference.fasta> --gadi_account <project code>
 
-  Required Arguments:
+  \033[1m\033[33mRequired Arguments:\033[0m
 
-  --input	              Specify full path and name of sample input file (tab separated).
+  \033[32m--input\033[0m               Specify full path and name of sample input file (tab separated).
 
-  --ref	                Specify full path and name of reference genome (FASTA format).
+  \033[32m--ref\033[0m                 Specify full path and name of reference genome (FASTA format).
 
-  --gadi_account	      Specify NCI Gadi project code for accounting and storage.
+  \033[32m--gadi_account\033[0m        Specify NCI Gadi project code for accounting and storage.
 
-  Optional Arguments:
+  \033[1m\033[33mOptional Arguments:\033[0m
 
-  --outdir	            Specify path to output directory. 
+  \033[34m--outdir\033[0m              Specify path to output directory. 
 
-  --storage_account	    Specify NCI Gadi project code for storage in addition to gadi_account. 
+  \033[34m--cohort_name\033[0m         Specify prefix for joint called VCF file. 
 
-  --download_vep_cache  Download the required cache (default: false).
+  \033[34m--storage_account\033[0m     Specify NCI Gadi project code for storage in addition to gadi_account. 
 
-  --vep_species         Specify which species cache to download from VEP (default: false).        
+  \033[34m--download_vep_cache\033[0m  Download the required cache (default: false).
 
-  --vep_assembly        Specify which assembly cache to download from VEP (default: false).   
+  \033[34m--vep_species\033[0m         Specify which species cache to download from VEP (default: false).        
+
+  \033[34m--vep_assembly\033[0m        Specify which assembly cache to download from VEP (default: false).   
 
 """.stripIndent()
 }
