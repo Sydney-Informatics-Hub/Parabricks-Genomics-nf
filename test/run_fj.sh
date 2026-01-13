@@ -6,7 +6,7 @@
 
 ## RUN THIS SCRIPT FROM THE Parabricks-Genomics-nf DIRECTORY WITH:
 ## bash bin/run_script.sh
-ref=${PWD}/test/test_chr21.fa
+ref=${PWD}/test_data/test_chr21.fa
 input=${PWD}/test/multipair_samples.csv
 gadi_account=er01
 storage_account=er01
