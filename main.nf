@@ -92,17 +92,10 @@ def refFile = file(params.ref)
 def refDir = refFile.parent
 def refName = refFile.name
 
-// CHECK IF INDEXES EXIST
-// if (!file("${refDir}/${refName}.bwt").exists()) {
-//     // If the index file does not exist, run the bwa_index process
-//     bwa_index(params.ref)
-// } else {
-//     log.info "BWA indexes already exist for ${params.ref}" 
-// }
 bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
     Channel.value(file("${refDir}/${refName}.*")) :
     // If doesn't exist run indexing 
-    bwa_index(params.ref).out.fa_index
+    bwa_index(params.ref).fa_index
 
 // VALIDATE INPUT SAMPLES 
 check_input(Channel.fromPath(params.input, checkIfExists: true))
