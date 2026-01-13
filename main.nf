@@ -95,7 +95,7 @@ def refName = refFile.name
 bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
     Channel.value(file("${refDir}/${refName}.*")) :
     // If doesn't exist run indexing 
-    bwa_index(params.ref).fa_index
+    bwa_index(refFile).fa_index
 
 // VALIDATE INPUT SAMPLES 
 check_input(Channel.fromPath(params.input, checkIfExists: true))
@@ -157,14 +157,14 @@ align_in = check_input.out.samplesheet
     return [sample, fq_in_list, platform, library, center, flowcell, lane] } // Group by sample, platform, library, center
   .groupTuple(by:[0, 2, 3, 4, 5, 6])
 
-pb_fq2bam(align_in, params.ref, bwa_index_ch)
+pb_fq2bam(align_in, refFile, bwa_index_ch)
 
 // QC ALIGNMENTS 
-pb_collectmetrics(pb_fq2bam.out.bam, params.ref, bwa_index_ch)
+pb_collectmetrics(pb_fq2bam.out.bam, refFile, bwa_index_ch)
 
 // CALL VARIANTS
 // CURRENTLY pb_deepvariant ONLY OUTPUTS GVCF OR VCF PER SAMPLE, NOT BOTH 
-pb_deepvariant(pb_fq2bam.out.bam, params.ref, bwa_index_ch)
+pb_deepvariant(pb_fq2bam.out.bam, refFile, bwa_index_ch)
 
 // JOINT GENOTYPE VARIANTS FOR COHORT
 gvcf_list = pb_deepvariant.out.gvcf
