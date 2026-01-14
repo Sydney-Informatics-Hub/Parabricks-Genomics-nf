@@ -1,8 +1,7 @@
 process pb_collectmetrics {
     tag "SAMPLE: ${sample}" 
     publishDir "${params.outdir}/bams/${sample}", mode: 'symlink'
-    stageInMode "copy" //Parabricks requires the files to be non-symlinked
-    label 'parabricks'
+    label "parabricks"
 
     input:
     tuple val(sample), path(bam), path(bai) 

@@ -1,8 +1,7 @@
 process pb_fq2bam {
     tag "SAMPLE: ${sample}" 
     publishDir "${params.outdir}/bams/${sample}", mode: 'symlink'
-    stageInMode "copy" //Parabricks requires the files to be non-symlinked
-    label 'parabricks'
+    label "parabricks"
 
     input:
     tuple val(sample), val(fq_in_list), val(platform), val(library), val(center), val(flowcell), val(lane)
