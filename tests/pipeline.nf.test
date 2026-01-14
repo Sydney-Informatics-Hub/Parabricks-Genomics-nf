@@ -1,0 +1,23 @@
+nextflow_pipeline {
+
+    name "End-to-end pipeline test"
+    script "main.nf"
+
+    test("Pipeline runs on a single-pe sample without VEP") {
+
+        when {
+            params {
+                input = "${projectDir}/test_data/samplesheets/single_pe.csv"
+                ref = "${projectDir}/test_data/test_chr21.fa"
+                gadi_storage = "er01"
+                gadi_account = "er01"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.tasks().size() == 10
+        }
+    }
+
+}
