@@ -103,38 +103,25 @@ bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
 reads_ch = channel.fromPath(params.input, checkIfExists: true)
   .splitCsv( header: true )
   // Convert fqs to paths
-  .map { row -> [ row.sample, file(row.fq1, checkIfExists: true), file(row.fq2, checkIfExists: true), row.platform, row.library, row.center ] }
+  .map { row -> [row.sample, file(row.fq1, checkIfExists: true), file(row.fq2, checkIfExists: true), row.platform, row.library, row.center] }
   .view()
 
 extract_flowcell_lane(reads_ch)
 
-extract_flowcell_lane.out.view()
+parsed_reads_ch = extract_flowcell_lane.out
+  .map { sample, fq1, fq2, platform, library, center, flowcell_file, lane_file ->
+    // Get the flowcell and lane info from file
+    def flowcell = flowcell_file.readLines()[0]
+    def lane = lane_file.readLines()[0]
+    return [sample, fq1, fq2, platform, library, center, flowcell, center]
+  }
+  .view()
 
 // FASTQC ON INPUT READS
-fastqc_in = extract_flowcell_lane.out
-  .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
-  .map{it -> 
-    def sample = it[0]
-    def fq1 = it[1]
-    def fq2 = it[2]
-    def platform = it[3]
-    def library = it[4]
-    def center = it[5]
-    def flowcell = it[6]
-    def lane = it[7]
-    def fq_in = "$fq1 $fq2"
-    return [sample, fq_in, platform, library, center, flowcell, lane]}
-  .groupTuple(by: [0, 2, 3, 4, 5, 6])
-  .map { it -> 
-    def sample = it[0]
-    def fq_in_list = it[1].join(' ')
-    def platform = it[2]
-    def library = it[3]
-    def center = it[4]
-    def flowcell = it[5]
-    def lane = it[6]
-    return [sample, fq_in_list] } // Group by sample, platform, library, center
-  .groupTuple(by:[0])
+fastqc_in = parsed_reads_ch
+  .map { sample, fq1, fq2, platform, library, center, flowcell, lane ->
+    return [sample, fq1, fq2]
+  }
 
 fastqc(fastqc_in)
 
