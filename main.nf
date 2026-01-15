@@ -2,7 +2,7 @@
 nextflow.enable.dsl=2
 
 // Import processes to be run in the workflow
-include { check_input } from './modules/check_input' 
+include { extract_flowcell_lane } from './modules/extract_flowcell_lane' 
 include { bwa_index } from './modules/bwa_index'
 include { fastqc  } from './modules/fastqc'
 include { pb_fq2bam } from './modules/pb_fq2bam'
@@ -100,11 +100,18 @@ bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
     bwa_index(refFile).fa_index
 
 // VALIDATE INPUT SAMPLES 
-check_input(Channel.fromPath(params.input, checkIfExists: true))
+reads_ch = channel.fromPath(params.input, checkIfExists: true)
+  .splitCsv( header: true )
+  // Convert fqs to paths
+  .map { row -> [ row.sample, file(row.fq1, checkIfExists: true), file(row.fq2, checkIfExists: true), row.platform, row.library, row.center ] }
+  .view()
+
+extract_flowcell_lane(reads_ch)
+
+extract_flowcell_lane.out.view()
 
 // FASTQC ON INPUT READS
-fastqc_in = check_input.out.samplesheet
-  .splitCsv(header: true)
+fastqc_in = extract_flowcell_lane.out
   .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
   .map{it -> 
     def sample = it[0]
@@ -133,8 +140,7 @@ fastqc(fastqc_in)
 
 // ALIGN READS
 // TODO dry this out, its very verbose because I don't understand Groovy
-align_in = check_input.out.samplesheet
-  .splitCsv(header: true)
+align_in = extract_flowcell_lane.out
   .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
   .map{it -> 
     def sample = it[0]
