@@ -4,7 +4,7 @@ process pb_fq2bam {
     label "parabricks"
 
     input:
-    tuple val(sample), val(fq_in_list), val(platform), val(library), val(center), val(flowcell), val(lane)
+    tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center), val(flowcell), val(lane)
     path(fasta)
 		path(fa_index)
 
@@ -16,11 +16,10 @@ process pb_fq2bam {
     
     script:
     def args = task.ext.args ?: ''
-    def fq_in_list = fq_in_list.join(' ')
         """
         pbrun fq2bam \\
           --ref ${fasta} \\
-          ${fq_in_list} \\
+          --in-fq ${fq1} ${fq2} \\
           --read-group-sm ${sample} \\
           --read-group-lb ${library} \\
           --read-group-pl ${platform} \\
