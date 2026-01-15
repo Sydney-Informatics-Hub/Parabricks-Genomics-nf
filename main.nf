@@ -118,9 +118,12 @@ parsed_reads_ch = extract_flowcell_lane.out
 
 // FASTQC ON INPUT READS
 fastqc_in = parsed_reads_ch
-  .map { sample, fq1, fq2, platform, library, center, flowcell, lane ->
-    return [sample, fq1, fq2]
-  }
+  // Goal of this is to group all pe-reads by sample
+  // e.g. [ sample, [fq_a_1, fq_a_2, fq_b_1, fq_b_2, ..., fq_N_1, fq_N_2]]
+  .map { sample, fq1, fq2, platform, library, center, flowcell, lane -> [sample, fq1, fq2] }
+  .map { sample, fq1, fq2 -> [sample, [fq1, fq2]] }
+  .groupTuple(by: 0)
+  .map { sample, fq_pair -> [ sample, fq_pair.flatten() ] }
 
 fastqc(fastqc_in)
 
