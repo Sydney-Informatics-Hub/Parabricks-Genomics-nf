@@ -127,11 +127,24 @@ fastqc_in = parsed_reads_ch
 
 fastqc(fastqc_in)
 
-// ALIGN READS
 align_in = parsed_reads_ch
-  // Group by sample, platform, library, center
-  .groupTuple(by:[0, 3, 4, 5, 6, 7])
+  // Group by sample, platform, library, center, flowcell, lane
+  // For samples with multiple fastq read pairs, these will be passed into
+  // pb_fq2bam while retaining read pairs are grouped correctly
+  .map { sample, fq1, fq2, platform, library, center, flowcell, lane -> 
+    [
+      [fq1, fq2], // paired fqs
+      sample, 
+      platform, 
+      library, 
+      center, 
+      flowcell, 
+      lane 
+    ]
+  }
+  .groupTuple(by:[1, 2, 3, 4, 5, 6, 7])
 
+// ALIGN READS
 pb_fq2bam(align_in, refFile, bwa_index_ch)
 
 // QC ALIGNMENTS 

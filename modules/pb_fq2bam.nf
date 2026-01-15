@@ -4,9 +4,11 @@ process pb_fq2bam {
     label "parabricks"
 
     input:
-    tuple val(sample), path(fq1), path(fq2), val(platform), val(library), val(center), val(flowcell), val(lane)
+    // The fqs are passed as a val() as they are passed as a nested list
+    // This list is unpacked in def in_fq() below.
+    tuple val(paired_fqs), val(sample), val(platform), val(library), val(center), val(flowcell), val(lane)
     path(fasta)
-		path(fa_index)
+	path(fa_index)
 
     output:
     tuple val(sample), path("*.bam"), path("*.bai"), emit: bam
@@ -16,10 +18,15 @@ process pb_fq2bam {
     
     script:
     def args = task.ext.args ?: ''
-        """
+    def in_fq = paired_fqs
+        .collect { paired_fq ->
+            "--in-fq ${paired_fq[0]} ${paired_fq[1]}"
+        }
+        .join(' \\\n')
+    """
         pbrun fq2bam \\
           --ref ${fasta} \\
-          --in-fq ${fq1} ${fq2} \\
+          ${in_fq} \\
           --read-group-sm ${sample} \\
           --read-group-lb ${library} \\
           --read-group-pl ${platform} \\
