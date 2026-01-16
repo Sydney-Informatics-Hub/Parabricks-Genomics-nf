@@ -1,5 +1,5 @@
 process pb_fq2bam {
-    tag "SAMPLE: ${sample}" 
+    tag "SAMPLE: ${sample}"
     publishDir "${params.outdir}/bams/${sample}", mode: 'symlink'
     label "parabricks"
 
@@ -7,15 +7,15 @@ process pb_fq2bam {
     // The fqs are passed as a val() as they are passed as a nested list
     // This list is unpacked in def in_fq() below.
     tuple val(paired_fqs), val(sample), val(platform), val(library), val(center), val(flowcell), val(lane)
-    path(fasta)
-	path(fa_index)
+    path fasta
+    path fa_index
 
     output:
     tuple val(sample), path("*.bam"), path("*.bai"), emit: bam
-    path("*_qc_metrics"), emit: qc_metrics
-    path("*_pbrun_fq2bam_log.txt"), emit: metrics_logs
-    path("*_duplicate_metrics.txt"), emit: duplicate_metrics
-    
+    path ("*_qc_metrics"), emit: qc_metrics
+    path ("*_pbrun_fq2bam_log.txt"), emit: metrics_logs
+    path ("*_duplicate_metrics.txt"), emit: duplicate_metrics
+
     script:
     def args = task.ext.args ?: ''
     def in_fq = paired_fqs
@@ -37,6 +37,6 @@ process pb_fq2bam {
           --fix-mate \\
           --optical-duplicate-pixel-distance 2500 \\
           --logfile ${sample}_pbrun_fq2bam_log.txt \\
-          $args
+          ${args}
     """
 }
