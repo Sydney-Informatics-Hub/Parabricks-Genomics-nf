@@ -87,8 +87,6 @@ if ( params.help == true || params.input == false || params.ref == false ){
 // If none of the above are a problem, then run the workflow
 } else {
 	
-outdir = Channel.value("${params.outdir}")
-
 // CREATE FASTA INDEXES 
 def refFile = file(params.ref)
 def refDir = refFile.parent
@@ -113,14 +111,14 @@ parsed_reads_ch = extract_flowcell_lane.out
   .map { sample, fq1, fq2, platform, library, center, flowcell_file, lane_file ->
     def flowcell = flowcell_file.readLines()[0]
     def lane = lane_file.readLines()[0]
-    return [sample, fq1, fq2, platform, library, center, flowcell, center]
+    return [sample, fq1, fq2, platform, library, center, flowcell, lane]
   }
 
 // FASTQC ON INPUT READS
 fastqc_in = parsed_reads_ch
   // Goal of this is to group all pe-reads by sample
   // e.g. [ sample, [fq_a_1, fq_a_2, fq_b_1, fq_b_2, ..., fq_N_1, fq_N_2]]
-  .map { sample, fq1, fq2, platform, library, center, flowcell, lane -> [sample, fq1, fq2] }
+  .map { sample, fq1, fq2, _platform, _library, _center, _flowcell, _lane -> [sample, fq1, fq2] }
   .map { sample, fq1, fq2 -> [sample, [fq1, fq2]] }
   .groupTuple(by: 0)
   .map { sample, fq_pair -> [ sample, fq_pair.flatten() ] }
@@ -156,10 +154,7 @@ pb_deepvariant(pb_fq2bam.out.bam, refFile, bwa_index_ch)
 
 // JOINT GENOTYPE VARIANTS FOR COHORT
 gvcf_list = pb_deepvariant.out.gvcf
-  .map{it -> 
-    def sample = it[0]
-    def gvcf = it[1]
-    return [gvcf] }
+  .map { _sample, gvcf -> [gvcf] }
   .collect()
 
 glnexus_joint_call(gvcf_list)
