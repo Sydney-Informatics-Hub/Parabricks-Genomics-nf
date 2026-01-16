@@ -2,7 +2,7 @@
 nextflow.enable.dsl=2
 
 // Import processes to be run in the workflow
-include { check_input } from './modules/check_input' 
+include { extract_flowcell_lane } from './modules/extract_flowcell_lane' 
 include { bwa_index } from './modules/bwa_index'
 include { fastqc  } from './modules/fastqc'
 include { pb_fq2bam } from './modules/pb_fq2bam'
@@ -87,8 +87,6 @@ if ( params.help == true || params.input == false || params.ref == false ){
 // If none of the above are a problem, then run the workflow
 } else {
 	
-outdir = Channel.value("${params.outdir}")
-
 // CREATE FASTA INDEXES 
 def refFile = file(params.ref)
 def refDir = refFile.parent
@@ -100,65 +98,51 @@ bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
     bwa_index(refFile).fa_index
 
 // VALIDATE INPUT SAMPLES 
-check_input(Channel.fromPath(params.input, checkIfExists: true))
+reads_ch = channel.fromPath(params.input, checkIfExists: true)
+  .splitCsv( header: true )
+  // Convert fqs to paths
+  .map { row -> [row.sample, file(row.fq1, checkIfExists: true), file(row.fq2, checkIfExists: true), row.platform, row.library, row.center] }
+
+// Parse the flowcell and lanes from the fq1 header
+extract_flowcell_lane(reads_ch)
+
+// Get the flowcell and lane info from file
+parsed_reads_ch = extract_flowcell_lane.out
+  .map { sample, fq1, fq2, platform, library, center, flowcell_file, lane_file ->
+    def flowcell = flowcell_file.readLines()[0]
+    def lane = lane_file.readLines()[0]
+    return [sample, fq1, fq2, platform, library, center, flowcell, lane]
+  }
 
 // FASTQC ON INPUT READS
-fastqc_in = check_input.out.samplesheet
-  .splitCsv(header: true)
-  .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
-  .map{it -> 
-    def sample = it[0]
-    def fq1 = it[1]
-    def fq2 = it[2]
-    def platform = it[3]
-    def library = it[4]
-    def center = it[5]
-    def flowcell = it[6]
-    def lane = it[7]
-    def fq_in = "$fq1 $fq2"
-    return [sample, fq_in, platform, library, center, flowcell, lane]}
-  .groupTuple(by: [0, 2, 3, 4, 5, 6])
-  .map { it -> 
-    def sample = it[0]
-    def fq_in_list = it[1].join(' ')
-    def platform = it[2]
-    def library = it[3]
-    def center = it[4]
-    def flowcell = it[5]
-    def lane = it[6]
-    return [sample, fq_in_list] } // Group by sample, platform, library, center
-  .groupTuple(by:[0])
+fastqc_in = parsed_reads_ch
+  // Goal of this is to group all pe-reads by sample
+  // e.g. [ sample, [fq_a_1, fq_a_2, fq_b_1, fq_b_2, ..., fq_N_1, fq_N_2]]
+  .map { sample, fq1, fq2, _platform, _library, _center, _flowcell, _lane -> [sample, fq1, fq2] }
+  .map { sample, fq1, fq2 -> [sample, [fq1, fq2]] }
+  .groupTuple(by: 0)
+  .map { sample, fq_pair -> [ sample, fq_pair.flatten() ] }
 
 fastqc(fastqc_in)
 
-// ALIGN READS
-// TODO dry this out, its very verbose because I don't understand Groovy
-align_in = check_input.out.samplesheet
-  .splitCsv(header: true)
-  .map { row -> tuple(row.sample, row.fq1, row.fq2, row.platform, row.library, row.center, row.flowcell, row.lane)}
-  .map{it -> 
-    def sample = it[0]
-    def fq1 = it[1]
-    def fq2 = it[2]
-    def platform = it[3]
-    def library = it[4]
-    def center = it[5]
-    def flowcell = it[6]
-    def lane = it[7]
-    def fq_in = "--in-fq $fq1 $fq2"
-    return [sample, fq_in, platform, library, center, flowcell, lane]}
-  .groupTuple(by: [0, 2, 3, 4, 5, 6])
-  .map { it -> 
-    def sample = it[0]
-    def fq_in_list = it[1].join(' ')
-    def platform = it[2]
-    def library = it[3]
-    def center = it[4]
-    def flowcell = it[5]
-    def lane = it[6]
-    return [sample, fq_in_list, platform, library, center, flowcell, lane] } // Group by sample, platform, library, center
-  .groupTuple(by:[0, 2, 3, 4, 5, 6])
+align_in = parsed_reads_ch
+  // Group by sample, platform, library, center, flowcell, lane
+  // For samples with multiple fastq read pairs, these will be passed into
+  // pb_fq2bam while retaining read pairs are grouped correctly
+  .map { sample, fq1, fq2, platform, library, center, flowcell, lane -> 
+    [
+      [fq1, fq2], // paired fqs
+      sample, 
+      platform, 
+      library, 
+      center, 
+      flowcell, 
+      lane 
+    ]
+  }
+  .groupTuple(by:[1, 2, 3, 4, 5, 6, 7])
 
+// ALIGN READS
 pb_fq2bam(align_in, refFile, bwa_index_ch)
 
 // QC ALIGNMENTS 
@@ -170,10 +154,7 @@ pb_deepvariant(pb_fq2bam.out.bam, refFile, bwa_index_ch)
 
 // JOINT GENOTYPE VARIANTS FOR COHORT
 gvcf_list = pb_deepvariant.out.gvcf
-  .map{it -> 
-    def sample = it[0]
-    def gvcf = it[1]
-    return [gvcf] }
+  .map { _sample, gvcf -> [gvcf] }
   .collect()
 
 glnexus_joint_call(gvcf_list)

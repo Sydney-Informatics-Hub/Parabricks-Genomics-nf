@@ -1,38 +1,33 @@
-# Test data for Parabricks 
+# Test data
 
-## Run test to ensure any workflow changes work fine 
-
-TODO make this a github action?
-
-To run test script fill in the following and execute with: 
-
-```bash
-bash test/run_script.sh 
-```
-* full path to ref `test/test_chr21.fa`
-* full path to input file `test/multipair_samples.csv`
-* full path to vep_cachedir `test/VEPcache`
-
-Will throw an error if downloading cache that already exists. 
-
-## Fasta reference 
+## Fasta reference (`test_chr21.fa`)
 
 Extracted 10,000 non-N lines on chr21 from hg38_chromosomesOnly.fa 
 
 ```
-samtools faidx /g/data/iz89/reference/hg38/hg38_chromosomesOnly.fa chr21 > test/chr21.fa
+samtools faidx /g/data/iz89/reference/hg38/hg38_chromosomesOnly.fa chr21 > test_data/chr21.fa
 echo "> chr21" > test_chr21.fa
-grep -v '^>' test/chr21.fa | grep -v 'N' | head 10000 > test_chr21.fa
-mv test_chr21.fa test/
-rm test/chr21.fa
+grep -v '^>' test_data/chr21.fa | grep -v 'N' | head 10000 > test_chr21.fa
+mv test_chr21.fa test_data/
+rm test_data/chr21.fa
 ```
 
-## Samplesheets 
+## Fasta indexes (`/fa_idx`)
+
+Retrieved from the workdir for `bwa_index`. Roughly:
+
+```bash
+bwa index test_data/test_chr21.fa 
+mv test_chr21.fa.* test_data
+```
+
+## Samplesheets (`/samplesheets`)
 
 * Use `testsamples.csv` for 1 pair/sampleID
 * Use `multipair_samples.csv` for >1 pair/sampleID 
+* Use `multipair_singlesample.csv` for >1 pair 1 sampleID 
 
-## PE fastqs
+## PE fastqs (`/fqs`)
 
 Taken from nf-core/raredisease test data and subset to 1,000 reads 
 Found @ https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_trio.csv

@@ -1,0 +1,4 @@
+sample,fq1,fq2,platform,library,center
+earlycasualcaiman,test_data/fqs/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1_1k.fastq.gz,test_data/fqs/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2_1k.fastq.gz,illumina,1,nfcoreraredisease
+hugelymodelbat,test_data/fqs/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1_1k.fastq.gz,test_data/fqs/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2_1k.fastq.gz,illumina,1,nfcoreraredisease
+slowlycivilbuck,test_data/fqs/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1_1k.fastq.gz,test_data/fqs/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2_1k.fastq.gz,illumina,1,nfcoreraredisease
