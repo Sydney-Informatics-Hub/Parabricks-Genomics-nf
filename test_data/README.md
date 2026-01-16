@@ -25,6 +25,7 @@ mv test_chr21.fa.* test_data
 
 * Use `testsamples.csv` for 1 pair/sampleID
 * Use `multipair_samples.csv` for >1 pair/sampleID 
+* Use `multipair_singlesample.csv` for >1 pair 1 sampleID 
 
 ## PE fastqs (`/fqs`)
 
