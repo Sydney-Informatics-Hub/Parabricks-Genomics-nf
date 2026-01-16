@@ -40,4 +40,3 @@ process pb_fq2bam {
           $args
     """
 }
-
