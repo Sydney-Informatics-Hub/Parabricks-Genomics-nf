@@ -1,15 +1,15 @@
 process bcftools_convert {
-    tag "COHORT: ${params.cohort_name}" 
+    tag "COHORT: ${params.cohort_name}"
     publishDir "${params.outdir}/variants", mode: 'symlink'
     container "quay.io/biocontainers/bcftools:1.17--h3cc50cf_1"
 
     input:
-    path("${params.cohort_name}.bcf") 
+    path "${params.cohort_name}.bcf"
 
     output:
-    path("${params.cohort_name}.vcf.gz"), emit: cohort_vcf
-    path("${params.cohort_name}.vcf.gz.tbi"), emit: cohort_vcf_tbi
-    
+    path ("${params.cohort_name}.vcf.gz"), emit: cohort_vcf
+    path ("${params.cohort_name}.vcf.gz.tbi"), emit: cohort_vcf_tbi
+
     script:
     """
     # CONVERT BCF TO VCF.GZ
