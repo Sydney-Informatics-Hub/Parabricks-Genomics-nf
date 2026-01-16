@@ -195,3 +195,4 @@ multiqc_in = fastqc.out.fastqc_results
 
 multiqc(multiqc_in, params.multiqc_config)
 }}
+

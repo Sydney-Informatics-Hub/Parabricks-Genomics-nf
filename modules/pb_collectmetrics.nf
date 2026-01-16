@@ -24,3 +24,4 @@ process pb_collectmetrics {
       $args
     """
 }
+
