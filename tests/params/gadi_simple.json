@@ -1,0 +1,11 @@
+{
+  "outdir": "results",
+  "help": false,
+  "cohort_name": "cohort",
+  "multiqc_config": "${baseDir}/assets/multiqc_config.yml",
+  "download_vep_cache": false,
+  "input": "test_data/samplesheets/multipair_singlesample.csv",
+  "ref": "test_data/test_chr21.fa",
+  "gadi_account": "er01",
+  "storage_account": "scratch/er01+gdata/er01"
+}
