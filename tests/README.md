@@ -29,3 +29,13 @@ Once in the session, run all available tests:
 module load nextflow/25.04.6
 nf-test test
 ```
+
+## Parameter files
+
+Parameter files are `json` or `yaml` files that contain parameters that are passed to a `
+nextflow run main.nf` command using the `-params-file` flag.
+
+Storing parameters is useful for running commands with long or complex parameters.
+
+See the Nextflow docs on [pipeline parameters](https://www.nextflow.io/docs/edge/cli.html
+#pipeline-parameters).

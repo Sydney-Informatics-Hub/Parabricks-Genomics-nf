@@ -1,0 +1,128 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/Genomics001: Parabricks-Genomics-nf//nextflow_schema.json",
+    "title": "Genomics001: Parabricks-Genomics-nf pipeline parameters",
+    "description": "GPU-enabled mapping and short variant calling with Parabricks",
+    "type": "object",
+    "$defs": {
+        "input_output_options": {
+            "title": "Input/output options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define where the pipeline should find input data and save output data.",
+            "required": [
+                "input",
+                "ref"
+            ],
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "schema": "assets/schema_input.json",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.csv$",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "A sample sheet with all metadata for the cohort you are processing. This file must be **comma-separated** and contain a header and one row per sample. Columns should correspond to `sample`,`fq1`,`fq2`,`platform`,`library`,`center`. See usage docs.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "outdir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "result"
+                },
+                "ref": {
+                    "type": "string",
+                    "fa_icon": "fas fa-book",
+                    "description": "Path to reference genome.",
+                    "help_text": "A reference genome FASTA file. Species with a public reference genome can be downloaded from [Ensembl](https://asia.ensembl.org/info/data/ftp/index.html), [UCSC](https://genome.ucsc.edu/goldenPath/help/ftp.html), or [NCBI](https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/) ftp sites. "
+                },
+                "cohort_name": {
+                    "type": "string",
+                    "default": "cohort",
+                    "description": "Name of prefix for the joint called VCF file.",
+                    "fa_icon": "fas fa-address-card"
+                }
+            }
+        },
+        "nci_gadi_configuration": {
+            "title": "NCI Gadi configuration",
+            "type": "object",
+            "description": "Provide if running this pipeline on NCI Gadi, ignore otherwise.",
+            "default": "",
+            "fa_icon": "fas fa-server",
+            "help_text": "",
+            "properties": {
+                "gadi_account": {
+                    "type": "string",
+                    "fa_icon": "fas fa-users-cog",
+                    "description": "The NCI project code for accounting and storage."
+                },
+                "storage_account": {
+                    "type": "string",
+                    "description": "Path(s) to NCI storage mounts.",
+                    "fa_icon": "fas fa-database",
+                    "help_text": "For example: `scratch/ab01` or `scratch/ab01+gdata/ab01+gdata/xy89`"
+                }
+            }
+        },
+        "annotation": {
+            "title": "Annotation",
+            "type": "object",
+            "description": "Define variant effect predictor (VEP) cache settings",
+            "default": "",
+            "properties": {
+                "download_vep_cache": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-download",
+                    "description": "Download annotation cache.",
+                    "help_text": "For available species caches, please see the [VEP download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify."
+                },
+                "vep_species": {
+                    "type": "string",
+                    "fa_icon": "fas fa-microscope",
+                    "description": "VEP species cache to download.",
+                    "help_text": "For available species caches, please see the [VEP download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify."
+                },
+                "vep_assembly": {
+                    "type": "string",
+                    "description": "VEP assembly to download.",
+                    "help_text": "For available species caches, please see the [VEP download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify."
+                }
+            },
+            "fa_icon": "fas fa-tag"
+        },
+        "other_options": {
+            "title": "Other options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-ellipsis-h",
+            "properties": {
+                "multiqc_config": {
+                    "type": "string",
+                    "default": "assets/multiqc_config.yml",
+                    "fa_icon": "fas fa-file-contract",
+                    "hidden": true,
+                    "description": "Path to multiqc config file."
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/$defs/input_output_options"
+        },
+        {
+            "$ref": "#/$defs/nci_gadi_configuration"
+        },
+        {
+            "$ref": "#/$defs/annotation"
+        },
+        {
+            "$ref": "#/$defs/other_options"
+        }
+    ]
+}

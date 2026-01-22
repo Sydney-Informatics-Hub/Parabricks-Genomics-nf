@@ -1,0 +1,13 @@
+{
+  "outdir": "results",
+  "help": false,
+  "cohort_name": "cohort",
+  "multiqc_config": "${baseDir}/assets/multiqc_config.yml",
+  "download_vep_cache": true,
+  "input": "test_data/samplesheets/multipair_singlesample.csv",
+  "ref": "test_data/samplesheets/multipair_singlesample.csv",
+  "gadi_account": "er01",
+  "storage_account": "scratch/er01+gdata/er01",
+  "vep_species": "homo_sapiens",
+  "vep_assembly": "GrCh38"
+}

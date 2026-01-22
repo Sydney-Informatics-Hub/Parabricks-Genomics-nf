@@ -1,14 +1,14 @@
 process glnexus_joint_call {
-    tag "JOINT GENOTYPING: ${params.cohort_name}" 
+    tag "JOINT GENOTYPING: ${params.cohort_name}"
     publishDir "${params.outdir}/variants", mode: 'symlink'
     container "ghcr.io/dnanexus-rnd/glnexus:v1.4.1"
 
     input:
-    path(gvcf_list) 
+    path gvcf_list
 
     output:
-    path("*.bcf"), emit: cohort_bcf
-    path("glnexus_list"), emit: glnexus_list
+    path ("*.bcf"), emit: cohort_bcf
+    path ("glnexus_list"), emit: glnexus_list
 
     script:
     def args = task.ext.args ?: ''
@@ -24,6 +24,6 @@ process glnexus_joint_call {
       --threads ${task.cpus} \
       --list glnexus_list \
       > ${params.cohort_name}.bcf \
-      $args
+      ${args}
     """
 }
