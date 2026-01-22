@@ -5,3 +5,5 @@ work/
 test/vep/
 bin/*.o
 bin/*.e
+.nf-test.log
+.nf-test/
