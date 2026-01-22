@@ -5,10 +5,10 @@
 ## qsub -I -P<project> -qgpuvolta -lncpus=24,ngpus=2,mem=380GB,storage=scratch/<project>
 
 ## RUN THIS SCRIPT FROM THE Parabricks-Genomics-nf DIRECTORY WITH:
-## bash bin/run_gadi_simple.sh
+## bash tests/run_gadi_vep.sh
 module load nextflow/25.04.6
-module load singularity
+module load ingularity
 
 nextflow run main.nf \
-    -params-file tests/params/gadi_simple.json \
+	-params-file tests/params/gadi_vep.json
     -profile gadi -resume
