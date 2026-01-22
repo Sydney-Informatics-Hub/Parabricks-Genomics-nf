@@ -62,7 +62,7 @@ def helpMessage() {
 
   \033[34m--cohort_name\033[0m         Specify prefix for joint called VCF file. 
 
-  \033[34m--storage_account\033[0m     Specify NCI Gadi project code for storage in addition to gadi_account. 
+  \033[34m--storage_account\033[0m     Specify NCI Gadi storage paths. For example, "scratch/ab01+gdata/xy89"
 
   \033[34m--download_vep_cache\033[0m  Download the required cache (default: false).
 

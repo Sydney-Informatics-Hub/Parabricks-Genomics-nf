@@ -62,8 +62,9 @@
                 },
                 "storage_account": {
                     "type": "string",
-                    "description": "An NCI project code for storage, in addition to the `gadi_account`",
-                    "fa_icon": "fas fa-database"
+                    "description": "Path(s) to NCI storage mounts.",
+                    "fa_icon": "fas fa-database",
+                    "help_text": "For example: `scratch/ab01` or `scratch/ab01+gdata/ab01+gdata/xy89`"
                 }
             }
         },
