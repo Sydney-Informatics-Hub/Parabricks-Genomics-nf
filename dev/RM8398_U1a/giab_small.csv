@@ -1,0 +1,6 @@
+sample,fq1,fq2,platform,library,center
+RM8398,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R1_001.fastq.gz,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R2_001.fastq.gz,hiseq2500,U1a,NIAS
+RM8398,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R1_002.fastq.gz,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R2_002.fastq.gz,hiseq2500,U1a,NIAS
+RM8398,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R1_003.fastq.gz,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R2_003.fastq.gz,hiseq2500,U1a,NIAS
+RM8398,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R1_004.fastq.gz,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R2_004.fastq.gz,hiseq2500,U1a,NIAS
+RM8398,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R1_005.fastq.gz,/g/data/er01/parabricks_4.6.0/U1a_ACAGTG_L001_R2_005.fastq.gz,hiseq2500,U1a,NIAS

@@ -1,0 +1,14 @@
+extract_flowcell_lane (INPUT: RM8398)	CACHED	417022	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/e4/1cbca90e6990cca3f2019c151873aa
+extract_flowcell_lane (INPUT: RM8398)	CACHED	412858	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/1d/d918df13f31518f06adfda01d93bb8
+extract_flowcell_lane (INPUT: RM8398)	CACHED	414937	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/fb/ccaeb600ac9e2313e3cb97e43fd37d
+extract_flowcell_lane (INPUT: RM8398)	CACHED	420758	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/22/923add037ca25325c230d47c92de3b
+extract_flowcell_lane (INPUT: RM8398)	CACHED	419198	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/0a/a950d66260c83d7f1972e5845c5588
+fastqc (SAMPLE: RM8398)	CACHED	160642278.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/e8/7014e02729957bffedcb1e2bfecfb8
+bwa_index (FASTA: GCF_000001405.40_GRCh38.p14_genomic.fna)	COMPLETED	160703269.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/e0/6f8b8bc44a3ee3c63c63c9875e40e7
+pb_fq2bam (SAMPLE: RM8398)	COMPLETED	160710131.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/9e/c258d1ff15b65ae88420ef066c1d87
+pb_deepvariant (SAMPLE: RM8398)	COMPLETED	160721685.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/74/39bce1b21051a97aace364f59446c7
+pb_collectmetrics (SAMPLE: RM8398)	COMPLETED	160721687.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/20/7e992f89d25c4a5a61e1cdf56aaa15
+glnexus_joint_call (JOINT GENOTYPING: cohort)	COMPLETED	160723030.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/97/6d6038a9a05863c20e4d9fd5f6b920
+bcftools_convert (COHORT: cohort)	COMPLETED	160724019.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/2d/467ef133da037edc5dbf893be7e69e
+bcftools_stats (COHORT: cohort)	COMPLETED	160724209.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/83/a8754ef7cab99c2b61d0bd36978ace
+multiqc (GENERATING REPORT: cohort)	COMPLETED	160724481.gadi-pbs	/scratch/er01/fj9712/Parabricks-Genomics-nf/work/cf/f6aed9c7609905f953286cc842d56f
