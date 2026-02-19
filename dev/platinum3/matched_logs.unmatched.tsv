@@ -1,0 +1,5 @@
+Source	Task_name	NF_status	Native_id	Work_dir	Log_path	Exit_status	Service_units	NCPUs_requested	NCPUs_used	CPU_time_used	Memory_requested	Memory_used	Walltime_requested	Walltime_used	JobFS_requested	JobFS_used
+NF_LOG_ONLY	extract_flowcell_lane (INPUT: NA12892)	COMPLETED	19394	/scratch/er01/fj9712/platinum/work/50/ed52ac22840df4fa922b18bb2ff3b0												
+NF_LOG_ONLY	extract_flowcell_lane (INPUT: NA12877)	COMPLETED	70418	/scratch/er01/fj9712/platinum/work/16/e212d2dc029ad38b62539293301ebc												
+LOG_REPORT_ONLY					work/4f/ef30b2d3f45f2c513886a547dfe9a1/.command.log	271	0.18	2	NA	00:02:30	8.0GB	6.48GB	10:00:00	00:02:42	100.0MB	0B
+LOG_REPORT_ONLY					work/1e/e903783ad7c04a19c0523705999961/.command.log	255	0.15	1	NA	00:00:03	8.0GB	134.52MB	10:00:00	00:02:12	100.0MB	0B
