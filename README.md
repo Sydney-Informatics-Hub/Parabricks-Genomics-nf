@@ -198,8 +198,7 @@ To run this pipeline on infrastructures other than NCI Gadi, you will need to cr
 
 |Metadata field     | Parabricks-Genomics-nf / v1.0.0   |
 |-------------------|:--------------------------------- |
-|Version            | 1.0.0                             |
-|Maturity           | First release                     |
+|Version            | 2.0.0                             |
 |Creators           | Georgie Samaha                    |
 |Source             | NA                                |
 |License            | GNU General Public License v3.0   |
@@ -259,6 +258,7 @@ Acknowledgements (and co-authorship, where appropriate) are an important way for
 ### **Authors**
 * Georgina Samaha (Sydney Informatics Hub, University of Sydney)
 * Cali Willet (Sydney Informatics Hub, University of Sydney)
+* Frederick Jaya (Sydney Informatics Hub, University of Sydney)
 
 ### **Suggested acknowledgement**  
 The authors acknowledge the support provided by the Sydney Informatics Hub, a Core Research Facility of the University of Sydney. This research/project was undertaken with the assistance of resources and services from the National Computational Infrastructure (NCI), which is supported by the Australian Government, and the Australian BioCommons which is enabled by NCRIS via Bioplatforms Australia funding.
