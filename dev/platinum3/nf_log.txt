@@ -1,0 +1,22 @@
+extract_flowcell_lane (INPUT: NA12878)	COMPLETED	19144	/scratch/er01/fj9712/platinum/work/3d/4ecfac2cf336449db388f67c9d934d
+download_vep (DOWNLOADING_CACHE: homo_sapiens - GRCh38)	COMPLETED	161002078.gadi-pbs	/scratch/er01/fj9712/platinum/work/69/8ffb5bda31772a2dcaf2e0ba9eb8d2
+bwa_index (FASTA: GCF_000001405.40_GRCh38.p14_genomic.fna)	COMPLETED	161002079.gadi-pbs	/scratch/er01/fj9712/platinum/work/33/e8360f20bf8802347883563ee3ef63
+extract_flowcell_lane (INPUT: NA12892)	COMPLETED	19394	/scratch/er01/fj9712/platinum/work/50/ed52ac22840df4fa922b18bb2ff3b0
+extract_flowcell_lane (INPUT: NA12877)	COMPLETED	70418	/scratch/er01/fj9712/platinum/work/16/e212d2dc029ad38b62539293301ebc
+fastqc (SAMPLE: NA12878)	COMPLETED	161007352.gadi-pbs	/scratch/er01/fj9712/platinum/work/b3/5863e77381b144a061399430543d17
+pb_fq2bam (SAMPLE: NA12878)	COMPLETED	161007353.gadi-pbs	/scratch/er01/fj9712/platinum/work/b6/ae92a90b7050af33f02d0ab9ec054e
+pb_fq2bam (SAMPLE: NA12892)	COMPLETED	161007355.gadi-pbs	/scratch/er01/fj9712/platinum/work/49/7b1424232d19692a977e2fac95a096
+fastqc (SAMPLE: NA12877)	COMPLETED	161007357.gadi-pbs	/scratch/er01/fj9712/platinum/work/5d/62112bcfa66b13bdf642ecbb0fd7ae
+fastqc (SAMPLE: NA12892)	COMPLETED	161007359.gadi-pbs	/scratch/er01/fj9712/platinum/work/71/d42c5dec0b5f7935e8a0a765a0bc49
+pb_fq2bam (SAMPLE: NA12877)	COMPLETED	161007361.gadi-pbs	/scratch/er01/fj9712/platinum/work/53/3182c70fb57bb352b5fcaccd5616ef
+pb_collectmetrics (SAMPLE: NA12878)	COMPLETED	161026438.gadi-pbs	/scratch/er01/fj9712/platinum/work/05/1ea0433f1a39cc619dbb9ee74db5ad
+pb_deepvariant (SAMPLE: NA12878)	COMPLETED	161026439.gadi-pbs	/scratch/er01/fj9712/platinum/work/37/5852818172e2dc7c95a2309e8a9b27
+pb_deepvariant (SAMPLE: NA12892)	COMPLETED	161026654.gadi-pbs	/scratch/er01/fj9712/platinum/work/f9/a512751a2fa67096ffedc79c2d3c43
+pb_collectmetrics (SAMPLE: NA12892)	COMPLETED	161026656.gadi-pbs	/scratch/er01/fj9712/platinum/work/44/23763d6235fadb465b6683bc28161f
+pb_deepvariant (SAMPLE: NA12877)	COMPLETED	161027711.gadi-pbs	/scratch/er01/fj9712/platinum/work/e4/5a447d2e4ae532662000a6b1e1dfe9
+pb_collectmetrics (SAMPLE: NA12877)	COMPLETED	161027712.gadi-pbs	/scratch/er01/fj9712/platinum/work/29/ab0bbe3b06fbf450b9f9df35caf32f
+glnexus_joint_call (JOINT GENOTYPING: cohort)	COMPLETED	161033349.gadi-pbs	/scratch/er01/fj9712/platinum/work/e9/1d2b8d326636fb8100b0eb3a8e411f
+bcftools_convert (COHORT: cohort)	COMPLETED	161033537.gadi-pbs	/scratch/er01/fj9712/platinum/work/b4/d5b818a7d536b937b975421de59216
+bcftools_stats (COHORT: cohort)	COMPLETED	161033563.gadi-pbs	/scratch/er01/fj9712/platinum/work/f9/9acf97dfe78e3c81f485cf1ac9a7cd
+annotate_vcf (COHORT: cohort)	COMPLETED	161033564.gadi-pbs	/scratch/er01/fj9712/platinum/work/07/1dcce0a765f6e161ff357bcd83ff67
+multiqc (GENERATING REPORT: cohort)	COMPLETED	161034069.gadi-pbs	/scratch/er01/fj9712/platinum/work/e9/6db0a2337ff5fcb51a831947310d3b

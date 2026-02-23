@@ -1,0 +1,4 @@
+sample,fq1,fq2,platform,library,center
+NA12878,/g/data/er01/parabricks_4.6.0/illumina_platinum_ped/ERR194146_1.fastq.gz,/g/data/er01/parabricks_4.6.0/illumina_platinum_ped/ERR194146_2.fastq.gz,illumina,unspecified,cambridge_illumina
+NA12892,/g/data/er01/parabricks_4.6.0/illumina_platinum_ped/ERR194161_1.fastq.gz,/g/data/er01/parabricks_4.6.0/illumina_platinum_ped/ERR194161_2.fastq.gz,illumina,unspecified,cambridge_illumina
+NA12877,/g/data/er01/parabricks_4.6.0/illumina_platinum_ped/ERR194147_1.fastq.gz,/g/data/er01/parabricks_4.6.0/illumina_platinum_ped/ERR194147_2.fastq.gz,illumina,unspecified,cambridge_illumina
