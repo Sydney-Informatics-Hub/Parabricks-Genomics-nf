@@ -143,7 +143,7 @@ For available species caches, please see the [VEP cache download site](https://f
 The most basic run command for this pipeline is:
 
 ```bash
-nextflow run main.nf --input sample.tsv --ref /path/to/ref -gadi_account <account-code> -profile gadi
+nextflow run main.nf --input sample.tsv --ref /path/to/ref --gadi_account <account-code> -profile gadi
 ```
 
 This will run the following processes: 
@@ -162,7 +162,7 @@ This will run the following processes:
 Additionally, you can run variant annotation using variant effect predictor by adding some additional flags `--download_vep_cache`, `--vep_species`, and `--vep_assembly` as specified in [section 2.2](#22-variant-effect-predictor-cache) above: 
 
 ```bash
-nextflow run main.nf --input <samplesheet.csv> --ref <ref.fasta> --download_vep_cache --vep_species <species> --vep_assembly <genome assembly> -gadi_account <account-code> -profile gadi 
+nextflow run main.nf --input <samplesheet.csv> --ref <ref.fasta> --download_vep_cache --vep_species <species> --vep_assembly <genome assembly> --gadi_account <account-code> -profile gadi 
 ```
 
 In addition to all steps above, this will run: 
@@ -172,7 +172,7 @@ In addition to all steps above, this will run:
 You will need to identify which species and assembly you require for the VEP cache download. See [section 2.2](#22-variant-effect-predictor-cache) above for instructions on how to do this. For example, running on a human dataset, aligned to the GRCh38 reference genome, you would use the following command: 
 
 ```bash
-nextflow run main.nf --input samplesheet.csv --ref path/to/GRCh38.fasta --download_vep_cache --vep_species homo_sapiens --vep_assembly GRCh38 -gadi_account <account-code> -profile gadi 
+nextflow run main.nf --input samplesheet.csv --ref path/to/GRCh38.fasta --download_vep_cache --vep_species homo_sapiens --vep_assembly GRCh38 --gadi_account <account-code> -profile gadi 
 ```
 
 If you are working across multiple project spaces on Gadi and need access to additional storage beyond `--gadi_account <account-code>`, you can use the `--storage_account <mount-paths>` to specify access to storage in addition to `/g/data` and `/scratch` for connected to the `--gadi_account` project.
