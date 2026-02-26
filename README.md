@@ -219,9 +219,9 @@ To run this pipeline on infrastructures other than NCI Gadi, you will need to cr
 ## Workflow summaries
 ### Metadata
 
-|Metadata field     | Parabricks-Genomics-nf / v2.0.0   |
+|Metadata field     | Parabricks-Genomics-nf / v2.0.1   |
 |-------------------|:--------------------------------- |
-|Version            | 2.0.0                             |
+|Version            | 2.0.1                             |
 |Creators           | Georgie Samaha                    |
 |Source             | NA                                |
 |License            | GNU General Public License v3.0   |
