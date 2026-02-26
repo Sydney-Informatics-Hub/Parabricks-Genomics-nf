@@ -4,8 +4,14 @@ authors:
   - family-names: "Samaha"
     given-names: "Georgina"
     orcid: "https://orcid.org/0000-0003-0419-1476"
+  - family-names: "Willet"
+    given-names: "Cali"
+    orcid: "https://orcid.org/0000-0001-8449-1502"
+  - family-names: "Jaya"
+    given-names: "Frederick"
+    orcid: "https://orcid.org/0000-0002-4019-7026"
 title: "Parabricks-Genomics-nf"
-version: 1.0.0
+version: 2.0.1
 doi: 10.48546/workflowhub.workflow.836.1
 date-released: 2024-01-10
 url: "https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf"
