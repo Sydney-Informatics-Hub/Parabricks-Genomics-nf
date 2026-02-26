@@ -31,27 +31,44 @@ This will create a directory with the following structure:
 Parabricks-Genomics-nf/
 ├── assets/
 ├── bin/
+├── CITATION.cff
 ├── config/
+├── dev/
 ├── LICENSE
 ├── main.nf
 ├── modules/
 ├── nextflow.config
-└── README.md
+├── nextflow_schema.json
+├── nf-test.config
+├── README.md
+├── results/
+├── test_data/
+└── tests/
 ```
 
 The important features are:
 
 * **main.nf** contains the main nextflow script that calls all the processes in the workflow.
 * **nextflow.config** contains default parameters to use in the pipeline.
-* **config** contains infrastructure-specific configuration files. 
-* **modules** contains individual process files for each step in the workflow.
-* **bin** contains scripts executed by the pipeline 
+* **config/** contains infrastructure-specific configuration files.
+* **modules/** contains individual process files for each step in the workflow.
+* **bin/** contains helper scripts executed by the pipeline.
 
-Keep in mind that this pipeline assumes all your data will be contained within one project code's `/scratch` and `/g/data` directories, as specified by the parameter `--gadi_account`. If you are working across multiple project codes, you will need to manually edit this line in the `gadi.config` to reflect this:
+Additionaly, resources are included for testing and development:
+
+* **dev/** contains benchmarking scripts and results.
+* **nextflow_schema.json** defines and validates pipeline parameters for Seqera platform.
+* **tests/** contains example scripts for manual and automated testing.
+* **test_data/** contains test input/reference data used by the test suite.
+
+Set your project and storage access at runtime using `--gadi_account` and `--storage_account`.
+By default, `--storage_account` is set to `scratch/${PROJECT}` (where `PROJECT` is your current Gadi project), but for most runs you should include both `/scratch` and `/g/data` plus any extra project spaces you need.
+
+For example:
 
 ```bash
-storage = "scratch/${params.gadi_account}+gdata/${params.gadi_account}"
-``` 
+--gadi_account er01 --storage_account "scratch/er01+gdata/er01"
+```
 
 As with all Gadi jobs, Nextflow processes run by this pipeline will only be able to access project directories specified by the `# PBS -lstorage` variable. 
 
@@ -158,7 +175,13 @@ You will need to identify which species and assembly you require for the VEP cac
 nextflow run main.nf --input samplesheet.csv --ref path/to/GRCh38.fasta --download_vep_cache --vep_species homo_sapiens --vep_assembly GRCh38 -gadi_account <account-code> -profile gadi 
 ```
 
-If you are working across multiple project spaces on Gadi and need access to additional storage beyond `-gadi_account <account-code>`, you can use the `-storage_account <account-code>` to specify access to storage in addition to `/g/data` and `/scratch` for connected to the `-gadi_account` project.
+If you are working across multiple project spaces on Gadi and need access to additional storage beyond `--gadi_account <account-code>`, you can use the `--storage_account <mount-paths>` to specify access to storage in addition to `/g/data` and `/scratch` for connected to the `--gadi_account` project.
+
+For example:
+
+```bash
+--gadi_account er01 --storage_account "scratch/er01+gdata/er01+scratch/ab01+gdata/ab01"
+```
 
 You can see all flags supported by this pipeline by running:
 
@@ -196,7 +219,7 @@ To run this pipeline on infrastructures other than NCI Gadi, you will need to cr
 ## Workflow summaries
 ### Metadata
 
-|Metadata field     | Parabricks-Genomics-nf / v1.0.0   |
+|Metadata field     | Parabricks-Genomics-nf / v2.0.0   |
 |-------------------|:--------------------------------- |
 |Version            | 2.0.0                             |
 |Creators           | Georgie Samaha                    |
@@ -218,7 +241,7 @@ To run this pipeline you must have Nextflow and Singularity installed. All other
 |-------------|:---------|
 |Nextflow     |>=20.07.1 |
 |Singularity  |          |
-|Parabricks   |4.2.0     |
+|Parabricks   |4.6.0     |
 |BCFtools     |1.17      |
 |BWA          |0.7.17    |
 |FastQC       |0.12.1    |
