@@ -7,13 +7,20 @@ on:
 jobs:
   wfh-submit:
     name: WorkflowHub submission
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # specifiy v for reproducibility, instead of 'latest'
+
+    # Safer than inheriting the default GITHUB_TOKEN permissions
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        # checkout@v4
+        uses: actions/checkout@1e31de5234b9f8995739874a8ce0492dc87873e2
 
       - name: Submit to WorkflowHub
-        uses: workflowhub-eu/submission-action@v0
+        # v0: Use a specific commit hash to ensure v0 code doesn't change silently
+        uses: workflowhub-eu/submission-action@c3a6b0c76a7db14247b4bd072c02f66b7c7d3e50
         env:
           API_TOKEN: ${{ secrets.WORKFLOWHUB_API_TOKEN }}
         with:
