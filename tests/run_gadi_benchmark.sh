@@ -10,4 +10,5 @@ nextflow run main.nf \
     --download_vep_cache \
     --vep_species "homo_sapiens" \
     --vep_assembly "GRCh38" \
-    -profile gadi -resume 
+    -profile gadi -resume \
+    -plugins nf-gadi@1.2.0 
