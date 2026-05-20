@@ -11,7 +11,7 @@ authors:
     given-names: "Frederick"
     orcid: "https://orcid.org/0000-0002-4019-7026"
 title: "Parabricks-Genomics-nf"
-version: 2.0.1
+version: 2.0.2
 doi: 10.48546/workflowhub.workflow.836.1
-date-released: 2024-01-10
+date-released: 2026-05-20
 url: "https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf"

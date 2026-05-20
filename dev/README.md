@@ -19,6 +19,16 @@ git push origin my-feature
 
 Clean versioning matters here - WorkflowHub submission is automated via `.github/workflows/workflowhub.yml` and triggers on GitHub Release publish. An unclean release (wrong tag, missing release notes) will produce a bad WorkflowHub entry.
 
+#### Before merging `dev` → `main`
+
+Commit the following to `dev` before opening the PR:
+
+- **CHANGELOG.md** - rename `[Unreleased]` to the new version and date (e.g. `[2.0.2] - 2026-05-20`), and update the comparison link at the bottom.
+- **`CITATION.cff`** - update `version` and `date-released`. Leave the `doi` field for the post-release follow-up (see below).
+- **`ro-crate-metadata.json`** - update any fields you own: description, author list, keywords, `dateModified`. Do not try to update the WorkflowHub version number, DOI, or URL. These are assigned by WorkflowHub after ingestion and can only be corrected in a follow-up commit after the release.
+
+#### Merge and tag
+
 ```bash
 # 1. PR dev → main (GitHub UI), then pull locally
 git checkout main
@@ -33,6 +43,15 @@ git push origin v2.0.2
 # Select tag v2.0.2, add release notes, click Publish
 # → WorkflowHub submission triggers automatically
 ```
+
+#### After the release
+
+Once WorkflowHub has processed the submission, commit the following to `dev`:
+
+- **`ro-crate-metadata.json`** - update the version number, DOI, and URL with the values assigned by WorkflowHub.
+- **`CITATION.cff`** - update the `doi` field to match.
+
+This is a normal follow-up step and expected every release.
 
 ## `gadi.config`
 
