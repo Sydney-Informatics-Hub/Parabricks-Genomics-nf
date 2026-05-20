@@ -72,7 +72,7 @@
       "name": "Parabricks-Genomics-nf",
       "url": "https://workflowhub.eu/workflows/836?version=1",
       "keywords": "Bioinformatics, INDELs, SNPs, variant calling, Genomics, whole genome sequencing, gpu, Annotation, mapping",
-      "version": 1,
+      "version": "2.0.2",
       "license": "https://spdx.org/licenses/GPL-3.0",
       "creator": {
         "@id": "https://workflowhub.eu/people/123"
