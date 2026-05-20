@@ -25,7 +25,10 @@ Commit the following to `dev` before opening the PR:
 
 - **CHANGELOG.md** - rename `[Unreleased]` to the new version and date (e.g. `[2.0.2] - 2026-05-20`), and update the comparison link at the bottom.
 - **`CITATION.cff`** - update `version` and `date-released`. Leave the `doi` field for the post-release follow-up (see below).
-- **`ro-crate-metadata.json`** - update the `"version"` field to the new semantic version string (e.g. `"2.0.2"`). This is how WorkflowHub determines the version being submitted - it reads directly from the ro-crate, not from the GitHub release tag. Also update any other fields you own: description, author list, keywords. Do not try to update the WorkflowHub-assigned DOI or URL, these are assigned after ingestion and corrected in the post-release follow-up (see below).
+- **`ro-crate-metadata.json`** - two version fields exist and serve different purposes:
+  - `"./"` (root Dataset): set `"version"` to the new semantic version string (e.g. `"2.0.2"`). This is what WorkflowHub reads to determine the submitted version — it does not use the GitHub release tag.
+  - `main.nf` entity: increment the integer `"version"` by 1 (e.g. `1` → `2`). This is WorkflowHub's internal version counter, assigned per submission. **Note:** the crate exported from WorkflowHub will have this field but will not have `"version"` on the root Dataset as these represent two different properties. The root Dataset `"version"` is only required for submission, not present in the export.
+  - Also update any other fields you own: description, author list, keywords. Do not try to update the WorkflowHub-assigned DOI or URL. These are corrected in the post-release follow-up (see below).
 
 #### Merge and tag
 
