@@ -1,0 +1,136 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      },
+      "conformsTo": [
+        {
+          "@id": "https://w3id.org/ro/crate/1.1"
+        },
+        {
+          "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
+        }
+      ]
+    },
+    {
+      "@id": "ro-crate-preview.html",
+      "@type": "CreativeWork",
+      "about": {
+        "@id": "./"
+      }
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "mainEntity": {
+        "@id": "main.nf"
+      },
+      "datePublished": "2024-04-02 04:25:38 +0100",
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0003-0419-1476"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8449-1502"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4019-7026"
+        }
+      ],
+      "license": "GPL-3.0",
+      "identifier": "https://doi.org/10.48546/workflowhub.workflow.836.1",
+      "url": "https://workflowhub.eu/workflows/836/ro_crate?version=1",
+      "name": "Research Object Crate for Parabricks-Genomics-nf",
+      "description": "Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/4.6.0/index.html) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. \n\nNVIDIA's Clara Parabricks can deliver a significant speed improvement over traditional CPU-based methods, and is designed to be used only with NVIDIA GPUs. This pipeline is suitable for population screening projects as it executes Parabrick's implementations of BWA mem for short read alignment and Google's DeepVariant for short variant calling. Additionally, it uses standard CPU implementations of data quality evaluation tools [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) and [DNAnexus' GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144) for scalable gVCF merging and joint variant calling. Optionally, [Variant Effect Predictor (VEP)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4) can be run for variant annotation. \n",
+      "isBasedOn": "https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf.git",
+      "sdDatePublished": "2026-05-20 01:31:51 +0100",
+      "hasPart": [
+        {
+          "@id": "main.nf"
+        }
+      ]
+    },
+    {
+      "@id": "main.nf",
+      "@type": [
+        "File",
+        "SoftwareSourceCode",
+        "ComputationalWorkflow"
+      ],
+      "contentSize": 6413,
+      "programmingLanguage": {
+        "@id": "#nextflow"
+      },
+      "dct:conformsTo": {
+        "@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/"
+      },
+      "description": "Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/4.6.0/index.html) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. \n\nNVIDIA's Clara Parabricks can deliver a significant speed improvement over traditional CPU-based methods, and is designed to be used only with NVIDIA GPUs. This pipeline is suitable for population screening projects as it executes Parabrick's implementations of BWA mem for short read alignment and Google's DeepVariant for short variant calling. Additionally, it uses standard CPU implementations of data quality evaluation tools [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) and [DNAnexus' GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144) for scalable gVCF merging and joint variant calling. Optionally, [Variant Effect Predictor (VEP)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4) can be run for variant annotation. \n",
+      "name": "Parabricks-Genomics-nf",
+      "url": "https://workflowhub.eu/workflows/836?version=1",
+      "keywords": "Bioinformatics, INDELs, SNPs, variant calling, Genomics, whole genome sequencing, gpu, Annotation, mapping",
+      "version": 1,
+      "license": "https://spdx.org/licenses/GPL-3.0",
+      "creator": {
+        "@id": "https://workflowhub.eu/people/123"
+      },
+      "producer": {
+        "@id": "https://workflowhub.eu/projects/43"
+      },
+      "dateCreated": "2024-04-25T23:19:53Z",
+      "dateModified": "2026-05-13T12:52:41Z",
+      "isPartOf": [
+
+      ],
+      "identifier": "https://doi.org/10.48546/workflowhub.workflow.836.1",
+      "input": [
+
+      ],
+      "output": [
+
+      ],
+      "sdPublisher": {
+        "@id": "https://about.workflowhub.eu/"
+      }
+    },
+    {
+      "@id": "https://orcid.org/0000-0003-0419-1476",
+      "@type": "Person",
+      "name": "Georgina Samaha",
+      "identifier": "https://orcid.org/0000-0003-0419-1476"
+    },
+    {
+      "@id": "https://workflowhub.eu/people/123",
+      "@type": "Person",
+      "name": "Georgina Samaha"
+    },
+    {
+      "@id": "https://workflowhub.eu/projects/43",
+      "@type": [
+        "Project",
+        "Organization"
+      ],
+      "name": "Sydney Informatics Hub"
+    },
+    {
+      "@id": "#nextflow",
+      "@type": "ComputerLanguage",
+      "name": "Nextflow",
+      "identifier": {
+        "@id": "https://www.nextflow.io/"
+      },
+      "url": {
+        "@id": "https://www.nextflow.io/"
+      }
+    },
+    {
+      "@id": "https://about.workflowhub.eu/",
+      "@type": "Organization",
+      "name": "WorkflowHub",
+      "url": "https://about.workflowhub.eu/"
+    }
+  ]
+}

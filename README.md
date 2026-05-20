@@ -217,22 +217,6 @@ As first port of call, we recommend looking through the MultiQC report to confir
 To run this pipeline on infrastructures other than NCI Gadi, you will need to create a custom configuration file and include this within the `profiles {}` section in the `nextflow.config`.  
 
 ## Workflow summaries
-### Metadata
-
-|Metadata field     | Parabricks-Genomics-nf / v2.0.1   |
-|-------------------|:--------------------------------- |
-|Version            | 2.0.1                             |
-|Creators           | Georgie Samaha                    |
-|Source             | NA                                |
-|License            | GNU General Public License v3.0   |
-|Workflow manager   | Nextflow                          |
-|Container          | See component tools               |
-|Install method     | NA                                |
-|GitHub             | https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf |
-|bio.tools          | NA                                |
-|BioContainers      | NA                                |
-|bioconda           | NA                                |
-
 ### Component tools
 
 To run this pipeline you must have Nextflow and Singularity installed. All other tools are run as containers using Singularity.
