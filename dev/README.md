@@ -25,7 +25,7 @@ Commit the following to `dev` before opening the PR:
 
 - **CHANGELOG.md** - rename `[Unreleased]` to the new version and date (e.g. `[2.0.2] - 2026-05-20`), and update the comparison link at the bottom.
 - **`CITATION.cff`** - update `version` and `date-released`. Leave the `doi` field for the post-release follow-up (see below).
-- **`ro-crate-metadata.json`** - update any fields you own: description, author list, keywords, `dateModified`. Do not try to update the WorkflowHub version number, DOI, or URL. These are assigned by WorkflowHub after ingestion and can only be corrected in a follow-up commit after the release.
+- **`ro-crate-metadata.json`** - update the `"version"` field to the new semantic version string (e.g. `"2.0.2"`). This is how WorkflowHub determines the version being submitted - it reads directly from the ro-crate, not from the GitHub release tag. Also update any other fields you own: description, author list, keywords. Do not try to update the WorkflowHub-assigned DOI or URL, these are assigned after ingestion and corrected in the post-release follow-up (see below).
 
 #### Merge and tag
 
