@@ -27,15 +27,22 @@ Genomics001: Parabricks-Genomics-nf
 \033[35mCite this pipeline @ INSERT DOI\033[0m
 
 \033[1m\033[33m=======================================================================================
-Workflow run parameters 
+Workflow run parameters
 =======================================================================================\033[0m
-\033[32minput_samples\033[0m : ${params.input}
-\033[32mcohort_name\033[0m   : ${params.cohort_name}
-\033[32mresults_dir\033[0m   : ${params.outdir}
-\033[32mreference\033[0m     : ${params.ref}
-\033[32mvep_species\033[0m   : ${params.vep_species}
-\033[32mvep_assembly\033[0m  : ${params.vep_assembly}
-\033[32mworkDir\033[0m       : ${workflow.workDir}
+\033[32minput_samples\033[0m      : ${params.input}
+\033[32mcohort_name\033[0m        : ${params.cohort_name}
+\033[32mresults_dir\033[0m        : ${params.outdir}
+\033[32mreference\033[0m          : ${params.ref}
+\033[32mvep_species\033[0m        : ${params.vep_species}
+\033[32mvep_assembly\033[0m       : ${params.vep_assembly}
+\033[32mworkDir\033[0m            : ${workflow.workDir}
+
+\033[1m\033[33m=======================================================================================
+Parabricks GPU configuration
+=======================================================================================\033[0m
+\033[32mparabricks_version\033[0m : ${params.parabricks_version}
+\033[32mmodule\033[0m             : parabricks/${params.parabricks_version}
+\033[32mgpu_queue\033[0m          : ${params.parabricks_version == '4.3.2' ? 'gpuvolta (V100)' : 'dgxa100 (A100)'}
 \033[1m\033[33m=======================================================================================\033[0m
 
 """
@@ -64,11 +71,13 @@ def helpMessage() {
 
   \033[34m--storage_account\033[0m     Specify NCI Gadi storage paths. For example, "scratch/ab01+gdata/xy89"
 
+  \033[34m--parabricks_version\033[0m  Parabricks version to load: '4.6.0' (dgxa100 queue) or '4.3.2' (gpuvolta queue). Default: 4.6.0.
+
   \033[34m--download_vep_cache\033[0m  Download the required cache (default: false).
 
-  \033[34m--vep_species\033[0m         Specify which species cache to download from VEP (default: false).        
+  \033[34m--vep_species\033[0m         Specify which species cache to download from VEP (default: false).
 
-  \033[34m--vep_assembly\033[0m        Specify which assembly cache to download from VEP (default: false).   
+  \033[34m--vep_assembly\033[0m        Specify which assembly cache to download from VEP (default: false).
 
 """.stripIndent()
 }
@@ -86,7 +95,12 @@ if ( params.help == true || params.input == false || params.ref == false ){
 
 // If none of the above are a problem, then run the workflow
 } else {
-	
+
+// Validate parabricks_version
+if (!['4.6.0', '4.3.2'].contains(params.parabricks_version)) {
+    error "Invalid --parabricks_version '${params.parabricks_version}'. Supported values: '4.6.0' (dgxa100) or '4.3.2' (gpuvolta)."
+}
+
 // CREATE FASTA INDEXES 
 def refFile = file(params.ref)
 def refDir = refFile.parent
