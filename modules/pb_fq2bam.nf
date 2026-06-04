@@ -24,6 +24,10 @@ process pb_fq2bam {
         }
         .join(' \\\n')
     """
+        echo "=== Parabricks version check (expected: ${params.parabricks_version}) ==="
+        pbrun version
+        echo "========================================================================="
+
         pbrun fq2bam \\
           --ref ${fasta} \\
           ${in_fq} \\

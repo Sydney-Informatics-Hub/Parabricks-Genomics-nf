@@ -15,9 +15,11 @@ process multiqc {
     script:
     def args = task.ext.args ?: ''
     """
+    sed 's/parabricks: .*/parabricks: "${params.parabricks_version}"/' ${params.multiqc_config} > multiqc_config_runtime.yml
+
     multiqc . \
         --filename ${params.cohort_name}_multiqc \
-        -c ${params.multiqc_config} \
+        -c multiqc_config_runtime.yml \
         ${args}
     """
 }
