@@ -15,6 +15,10 @@ process pb_deepvariant {
     script:
     def args = task.ext.args ?: ''
     """
+    echo "=== Parabricks version check (expected: ${params.parabricks_version}) ==="
+    pbrun version
+    echo "========================================================================="
+
     pbrun deepvariant \\
       --ref ${fasta} \\
       --in-bam ${bam} \\

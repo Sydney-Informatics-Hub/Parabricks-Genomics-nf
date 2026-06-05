@@ -65,6 +65,13 @@
                     "description": "Path(s) to NCI storage mounts.",
                     "fa_icon": "fas fa-database",
                     "help_text": "For example: `scratch/ab01` or `scratch/ab01+gdata/ab01+gdata/xy89`"
+                },
+                "parabricks_version": {
+                    "type": "string",
+                    "default": "4.6.0",
+                    "description": "Parabricks version to load. Use '4.6.0' to run on the dgxa100 queue (A100 GPUs) or '4.3.2' to run on the gpuvolta queue (V100 GPUs).",
+                    "fa_icon": "fas fa-microchip",
+                    "enum": ["4.6.0", "4.3.2"]
                 }
             }
         },

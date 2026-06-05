@@ -15,6 +15,10 @@ process pb_collectmetrics {
     script:
     def args = task.ext.args ?: ''
     """
+    echo "=== Parabricks version check (expected: ${params.parabricks_version}) ==="
+    pbrun version
+    echo "========================================================================="
+
     pbrun bammetrics \\
       --ref ${fasta} \\
       --bam ${bam} \\

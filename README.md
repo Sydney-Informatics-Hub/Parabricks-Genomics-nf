@@ -3,7 +3,7 @@
 
 ## Description 
 
-Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/4.2.0/index.html) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. 
+Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. 
 
 NVIDIA's Clara Parabricks can deliver a significant speed improvement over traditional CPU-based methods, and is designed to be used only with NVIDIA GPUs. This pipeline is suitable for population screening projects as it executes Parabrick's implementations of BWA mem for short read alignment and Google's DeepVariant for short variant calling. Additionally, it uses standard CPU implementations of data quality evaluation tools [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) and [DNAnexus' GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144) for scalable gVCF merging and joint variant calling. Optionally, [Variant Effect Predictor (VEP)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4) can be run for variant annotation. 
 
@@ -143,21 +143,38 @@ For available species caches, please see the [VEP cache download site](https://f
 The most basic run command for this pipeline is:
 
 ```bash
-nextflow run main.nf --input sample.tsv --ref /path/to/ref --gadi_account <account-code> -profile gadi
+nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <account-code> -profile gadi
 ```
 
-This will run the following processes: 
+This will run the following processes:
 
-* Check validity of provided inputs 
+* Check validity of provided inputs
 * [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for summary of raw reads
 * [BWA index](https://bio-bwa.sourceforge.net/bwa.shtml) if bwa indexes for your provided reference fasta are not detected
-* [Parabricks' fq2bam](https://docs.nvidia.com/clara/parabricks/4.2.0/documentation/tooldocs/man_fq2bam.html#man-fq2bam) for performing read alignment and generating bam files for individuals
-* [Parabricks' deepvariant](https://docs.nvidia.com/clara/parabricks/4.2.0/documentation/tooldocs/man_deepvariant.html#man-deepvariant) for performing SNV/indel genotyping for individuals 
-* [Parabricks' bammetrics](https://docs.nvidia.com/clara/parabricks/4.2.0/documentation/tooldocs/man_bammetrics.html#man-bammetrics) for generating alignment metrics 
-* [Glnexus](https://github.com/dnanexus-rnd/GLnexus) for joint genotyping of all individuals and creation of a cohort-level BCF file 
+* [Parabricks' fq2bam](https://docs.nvidia.com/clara/parabricks/latest/documentation/tooldocs/man_fq2bam.html) for performing read alignment and generating bam files for individuals
+* [Parabricks' deepvariant](https://docs.nvidia.com/clara/parabricks/latest/documentation/tooldocs/man_deepvariant.html) for performing SNV/indel genotyping for individuals
+* [Parabricks' bammetrics](https://docs.nvidia.com/clara/parabricks/latest/documentation/tooldocs/man_bammetrics.html) for generating alignment metrics
+* [Glnexus](https://github.com/dnanexus-rnd/GLnexus) for joint genotyping of all individuals and creation of a cohort-level BCF file
 * [BCFtools convert](https://samtools.github.io/bcftools/bcftools.html) to convert the cohort BCF to a VCF
 * [BCFtools stats](https://samtools.github.io/bcftools/bcftools.html) for summary statistics of the cohort VCF
 * [MultiQC](https://multiqc.info/) for generating a summary html report of all processes
+
+#### Selecting a Parabricks version and GPU queue
+
+By default, this pipeline loads Parabricks 4.6.0 and submits GPU jobs to the `dgxa100` queue (NVIDIA A100 GPUs). If the `dgxa100` queue is in high demand, you can instead run on the `gpuvolta` queue (NVIDIA V100 GPUs) using Parabricks 4.3.2:
+
+| `--parabricks_version` | Queue      | GPU        | CPUs/node | Memory/node |
+|------------------------|------------|------------|-----------|-------------|
+| `4.6.0` (default)      | `dgxa100`  | A100       | 128       | ~2 TB       |
+| `4.3.2`                | `gpuvolta` | V100       | 48        | 382 GB      |
+
+To run on `gpuvolta`:
+
+```bash
+nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <account-code> -profile gadi --parabricks_version 4.3.2
+```
+
+The pipeline automatically adjusts the queue, CPU, and memory allocations based on the version you specify. The Parabricks version used in a run is recorded in the startup log and in each GPU task's `.command.log`, and is correctly reflected in the MultiQC report.
 
 Additionally, you can run variant annotation using variant effect predictor by adding some additional flags `--download_vep_cache`, `--vep_species`, and `--vep_assembly` as specified in [section 2.2](#22-variant-effect-predictor-cache) above: 
 
@@ -221,17 +238,17 @@ To run this pipeline on infrastructures other than NCI Gadi, you will need to cr
 
 To run this pipeline you must have Nextflow and Singularity installed. All other tools are run as containers using Singularity.
 
-|Tool         | Version  |
-|-------------|:---------|
-|Nextflow     |>=20.07.1 |
-|Singularity  |          |
-|Parabricks   |4.6.0     |
-|BCFtools     |1.17      |
-|BWA          |0.7.17    |
-|FastQC       |0.12.1    |
-|Glnexus      |0.2.7     |
-|MultiQC      |1.21      |
-|VEP          |110.1     |
+|Tool         | Version          |
+|-------------|:-----------------|
+|Nextflow     |>=20.07.1         |
+|Singularity  |                  |
+|Parabricks   |4.6.0 or 4.3.2    |
+|BCFtools     |1.17              |
+|BWA          |0.7.17            |
+|FastQC       |0.12.1            |
+|Glnexus      |0.2.7             |
+|MultiQC      |1.21              |
+|VEP          |110.1             |
 
 
 
