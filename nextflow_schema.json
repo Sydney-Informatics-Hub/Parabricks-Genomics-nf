@@ -39,6 +39,13 @@
                     "description": "Path to reference genome.",
                     "help_text": "A reference genome FASTA file. Species with a public reference genome can be downloaded from [Ensembl](https://asia.ensembl.org/info/data/ftp/index.html), [UCSC](https://genome.ucsc.edu/goldenPath/help/ftp.html), or [NCBI](https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/) ftp sites. "
                 },
+                "bwa_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder",
+                    "description": "Path to a directory containing a prebuilt BWA index for the reference.",
+                    "help_text": "Optional. Directory holding the `.amb`, `.ann`, `.bwt`, `.pac`, `.sa` files whose basenames match the `--ref` FASTA. If provided, the pipeline skips the `bwa_index` step entirely. If omitted, the pipeline reuses an index colocated next to the reference FASTA, or builds one if none exists."
+                },
                 "cohort_name": {
                     "type": "string",
                     "default": "cohort",

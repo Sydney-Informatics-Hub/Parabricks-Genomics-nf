@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Optional `--bwa_index` parameter to point at a prebuilt BWA index directory and skip the `bwa_index` step (`nextflow.config`, `main.nf`, `nextflow_schema.json`, README). Useful when the reference lives in a read-only directory that cannot hold a colocated index.
+
+### Fixed
+- `extract_flowcell_lane` no longer decompresses the entire FASTQ to read the header. `sed -n '1p'` read stdin to EOF, forcing `gzip -dc` through the whole ~30 GB file (~46–50 min per sample); changed to `sed -n '1{p;q}'` so decompression stops after the first line (sub-second).
+
+## [3.0.0] - 2026-06-05
+
+### Added
+- `--parabricks_version` parameter to select the Parabricks release and target GPU queue: `4.6.0` (dgxa100 / A100, default) or `4.3.2` (gpuvolta / V100). Invalid values are rejected at startup (`main.nf`, `nextflow_schema.json`).
+- Selected version is printed in the run header and help text, and echoed as a runtime check inside `pb_fq2bam`, `pb_deepvariant`, and `pb_collectmetrics`.
+- MultiQC report now records the Parabricks version used at runtime (`modules/multiqc.nf`).
+
+### Changed
+- GPU queue, CPU, and memory allocations are now derived from `--parabricks_version` instead of being hardcoded: gpuvolta uses `task.gpus * 12` CPUs and 95 GB (collectmetrics), dgxa100 uses `task.gpus * 16` CPUs and 190 GB (`config/modules.config`).
+- Parabricks module load is selected by version (`parabricks/4.3.2` vs `parabricks/4.6.0`) in `config/gadi.config`.
+- README updated with a per-version queue/GPU/resource table and usage examples.
+
 ## [2.0.2] - 2026-05-20
 
 ### Added

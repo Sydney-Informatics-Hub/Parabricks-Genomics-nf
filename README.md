@@ -126,6 +126,14 @@ When you run the pipeline, you will use the mandatory `--ref` parameter to speci
 --ref /path/to/reference.fasta
 ```
 
+Indexing hg38 takes ~1 hour of walltime and is deterministic, so it is wasteful to rebuild it on every run. If you already have a prebuilt BWA index (for example built once and stored in a writable location, or when the reference directory itself is read-only), point the pipeline at it with the optional `--bwa_index` parameter to skip the `bwa_index` step entirely:
+
+```
+--bwa_index /path/to/index_dir
+```
+
+The directory must contain the `.amb`, `.ann`, `.bwt`, `.pac`, `.sa` files whose basenames match the `--ref` FASTA (e.g. `reference.fasta.bwt`). If `--bwa_index` is omitted, the pipeline reuses an index colocated next to the reference FASTA, and only builds one if none exists.
+
 #### 2.2 Variant effect predictor cache 
 
 An optional feature of this workflow is to annotate output variants with Ensembl's [Variant Effect Predictor](https://asia.ensembl.org/info/docs/tools/vep/index.html). You can opt to download the required cache using the `--download_vep_cache` flag, additionally specifying the species and assembly you require: 

@@ -106,9 +106,14 @@ def refFile = file(params.ref)
 def refDir = refFile.parent
 def refName = refFile.name
 
-bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
-    Channel.value(file("${refDir}/${refName}.*")) :
-    // If doesn't exist run indexing 
+bwa_index_ch =
+    // Prefer an explicitly provided prebuilt index (decoupled from a read-only ref dir)
+    params.bwa_index ?
+        Channel.value(file("${params.bwa_index}/*")) :
+    // Otherwise reuse an index colocated next to the reference FASTA
+    file("${refDir}/${refName}.bwt").exists() ?
+        Channel.value(file("${refDir}/${refName}.*")) :
+    // If neither exists, build it
     bwa_index(refFile).fa_index
 
 // VALIDATE INPUT SAMPLES 
