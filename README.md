@@ -146,6 +146,16 @@ An optional feature of this workflow is to annotate output variants with Ensembl
 
 For available species caches, please see the [VEP cache download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify. Please keep in mind that VEP requires you to specify species and assembly as they are named in these files.  
 
+The VEP cache is large (~21 GB for hg38) and deterministic, so it is wasteful to re-download it on every run. If you already have a prebuilt cache (for example downloaded once and stored in a writable location), point the pipeline at it with the optional `--vep_cache` parameter to skip the download step:
+
+```bash
+--vep_cache /path/to/vep_cache
+--vep_species homo_sapiens
+--vep_assembly GRCh38
+```
+
+The directory must contain the cache in `<species>/<version>_<assembly>` layout (e.g. `homo_sapiens/110_GRCh38`). When `--vep_cache` is set, annotation runs against the local cache and `--download_vep_cache` is not required.
+
 ### 3. Run the pipeline 
 
 The most basic run command for this pipeline is:

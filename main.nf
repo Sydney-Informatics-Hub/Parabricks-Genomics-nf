@@ -75,6 +75,8 @@ def helpMessage() {
 
   \033[34m--download_vep_cache\033[0m  Download the required cache (default: false).
 
+  \033[34m--vep_cache\033[0m           Path to a prebuilt VEP cache dir (contains <species>/<version>_<assembly>). Skips download when set.
+
   \033[34m--vep_species\033[0m         Specify which species cache to download from VEP (default: false).
 
   \033[34m--vep_assembly\033[0m        Specify which assembly cache to download from VEP (default: false).
@@ -184,20 +186,26 @@ bcftools_convert(glnexus_joint_call.out.cohort_bcf)
 // QC SUMMARY OF ALL SAMPLES IN COHORT VCF 
 bcftools_stats(bcftools_convert.out.cohort_vcf, bcftools_convert.out.cohort_vcf_tbi)
 
-// DOWNLOAD VEP CACHE AND ANNOTATE WITH DOWNLOADED CACHE
-if (params.download_vep_cache){
+// ANNOTATE COHORT VCF WITH VEP
+// Prefer an explicitly provided prebuilt cache; otherwise download when requested
+run_vep = params.vep_cache ? true : params.download_vep_cache
 
-	download_vep(params.vep_assembly, params.vep_species) 
-  annotate_vcf(params.cohort_name, 
-              bcftools_convert.out.cohort_vcf, 
-              bcftools_convert.out.cohort_vcf_tbi,  
-              params.vep_assembly, 
+if (run_vep){
+
+  vep_cache_ch = params.vep_cache ?
+      Channel.value(file(params.vep_cache, checkIfExists: true)) :
+      download_vep(params.vep_assembly, params.vep_species).cache
+
+  annotate_vcf(params.cohort_name,
+              bcftools_convert.out.cohort_vcf,
+              bcftools_convert.out.cohort_vcf_tbi,
+              params.vep_assembly,
               params.vep_species,
-              download_vep.out.cache)
+              vep_cache_ch)
 }
 
 // GENERATE MULTIQC REPORT
-vep_report_ch = params.download_vep_cache ? annotate_vcf.out.vep_report : Channel.empty()
+vep_report_ch = run_vep ? annotate_vcf.out.vep_report : Channel.empty()
 
 multiqc_in = fastqc.out.fastqc_results
           .concat(pb_fq2bam.out.qc_metrics, 
