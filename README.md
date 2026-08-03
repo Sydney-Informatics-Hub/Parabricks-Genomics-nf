@@ -204,7 +204,7 @@ nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <accou
 
 This changes two steps to match Google DeepVariant's documented WES behaviour ([NVIDIA source-of-mismatches notes](https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches)):
 
-* `pbrun deepvariant` runs with `--use-wes-model --disable-small-model` instead of the default WGS model
+* `pbrun deepvariant` runs with `--use-wes-model` instead of the default WGS model. `--disable-small-model` is also added when `--parabricks_version` is 4.7.0 or later, since earlier Parabricks releases reject that flag as unrecognised.
 * GLnexus joint-genotyping uses the `DeepVariantWES` config instead of `DeepVariantWGS`
 
 Alignment (`fq2bam`) is unaffected by capture design and runs the same for WGS and WES.
