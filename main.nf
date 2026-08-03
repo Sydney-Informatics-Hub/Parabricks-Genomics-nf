@@ -35,6 +35,7 @@ Workflow run parameters
 \033[32mreference\033[0m          : ${params.ref}
 \033[32mvep_species\033[0m        : ${params.vep_species}
 \033[32mvep_assembly\033[0m       : ${params.vep_assembly}
+\033[32mexome_mode\033[0m         : ${params.exome}
 \033[32mworkDir\033[0m            : ${workflow.workDir}
 
 \033[1m\033[33m=======================================================================================
@@ -80,6 +81,8 @@ def helpMessage() {
   \033[34m--vep_species\033[0m         Specify which species cache to download from VEP (default: false).
 
   \033[34m--vep_assembly\033[0m        Specify which assembly cache to download from VEP (default: false).
+
+  \033[34m--exome\033[0m               Run joint-genotyping with the exome (WES) GLnexus preset instead of WGS (default: false).
 
 """.stripIndent()
 }

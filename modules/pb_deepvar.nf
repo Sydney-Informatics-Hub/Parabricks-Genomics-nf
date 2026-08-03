@@ -14,6 +14,9 @@ process pb_deepvariant {
 
     script:
     def args = task.ext.args ?: ''
+    // See: https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches
+    // --disable-small-model must accompany --use-wes-model to match Google DeepVariant's WES behaviour
+    def exome_args = params.exome ? '--use-wes-model --disable-small-model' : ''
     """
     echo "=== Parabricks version check (expected: ${params.parabricks_version}) ==="
     pbrun version
@@ -25,6 +28,7 @@ process pb_deepvariant {
       --out-variants ${sample}.g.vcf.gz \\
       --gvcf \\
       --logfile ${sample}_deepvariant_log.txt \\
+      ${exome_args} \\
       ${args}
     """
 }
