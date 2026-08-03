@@ -194,6 +194,21 @@ nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <accou
 
 The pipeline automatically adjusts the queue, CPU, and memory allocations based on the version you specify. The Parabricks version used in a run is recorded in the startup log and in each GPU task's `.command.log`, and is correctly reflected in the MultiQC report.
 
+#### Running on exome (WES) data
+
+If your cohort is whole-exome sequencing data, add the `--exome` flag:
+
+```bash
+nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <account-code> -profile gadi --exome
+```
+
+This changes two steps to match Google DeepVariant's documented WES behaviour ([NVIDIA source-of-mismatches notes](https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches)):
+
+* `pbrun deepvariant` runs with `--use-wes-model --disable-small-model` instead of the default WGS model
+* GLnexus joint-genotyping uses the `DeepVariantWES` config instead of `DeepVariantWGS`
+
+Alignment (`fq2bam`) is unaffected by capture design and runs the same for WGS and WES.
+
 Additionally, you can run variant annotation using variant effect predictor by adding some additional flags `--download_vep_cache`, `--vep_species`, and `--vep_assembly` as specified in [section 2.2](#22-variant-effect-predictor-cache) above: 
 
 ```bash

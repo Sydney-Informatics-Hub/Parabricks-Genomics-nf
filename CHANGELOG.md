@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Optional `--bwa_index` parameter to point at a prebuilt BWA index directory and skip the `bwa_index` step (`nextflow.config`, `main.nf`, `nextflow_schema.json`, README). Useful when the reference lives in a read-only directory that cannot hold a colocated index.
 - Optional `--vep_cache` parameter to point at a prebuilt VEP cache directory (containing `<species>/<version>_<assembly>`) and skip the `download_vep` step (`nextflow.config`, `main.nf`, `nextflow_schema.json`, README). When set, annotation runs against the local cache; otherwise the `--download_vep_cache` download path is used. Avoids re-downloading the ~21 GB cache each run.
+- Optional `--exome` parameter for whole-exome (WES) cohorts (`nextflow.config`, `modules/glnexus_joint.nf`, `modules/pb_deepvar.nf`, `main.nf`, `nextflow_schema.json`, README). When set: GLnexus joint-genotyping uses the `DeepVariantWES` preset instead of `DeepVariantWGS`, and `pbrun deepvariant` runs with `--use-wes-model --disable-small-model` to match Google DeepVariant's WES behaviour (see [NVIDIA's source-of-mismatches notes](https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches)).
 
 ### Fixed
 - `extract_flowcell_lane` no longer decompresses the entire FASTQ to read the header. `sed -n '1p'` read stdin to EOF, forcing `gzip -dc` through the whole ~30 GB file (~46–50 min per sample); changed to `sed -n '1{p;q}'` so decompression stops after the first line (sub-second).

@@ -51,6 +51,13 @@
                     "default": "cohort",
                     "description": "Name of prefix for the joint called VCF file.",
                     "fa_icon": "fas fa-address-card"
+                },
+                "exome": {
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-dna",
+                    "description": "Run variant calling and joint-genotyping with exome (WES) presets instead of the default whole-genome (WGS) presets.",
+                    "help_text": "Set this when your cohort is whole-exome sequencing data. Runs `pbrun deepvariant` with `--use-wes-model --disable-small-model`, and switches `glnexus_cli --config` from `DeepVariantWGS` to `DeepVariantWES`, matching Google DeepVariant's documented WES behaviour (see https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches). Has no effect on alignment."
                 }
             }
         },
