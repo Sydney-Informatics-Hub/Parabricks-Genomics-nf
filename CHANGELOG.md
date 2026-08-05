@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - `extract_flowcell_lane` no longer decompresses the entire FASTQ to read the header. `sed -n '1p'` read stdin to EOF, forcing `gzip -dc` through the whole ~30 GB file (~46–50 min per sample); changed to `sed -n '1{p;q}'` so decompression stops after the first line (sub-second).
+- `align_in` channel grouping in `main.nf` grouped by `flowcell`/`lane` in addition to `sample`/`platform`/`library`/`center`, splitting each lane of a multi-lane sample into its own `pb_fq2bam`/`pb_deepvariant` call. This produced multiple identically-named per-sample gVCFs, causing an "input file name collision" error in `glnexus_joint_call` for any sample with more than one fastq pair. Grouping now excludes `flowcell`/`lane` so all lanes for a sample merge into a single alignment/calling call, as `pb_fq2bam` already expected (`paired_fqs` accepted as a list of read pairs).
 
 ## [3.0.0] - 2026-06-05
 
