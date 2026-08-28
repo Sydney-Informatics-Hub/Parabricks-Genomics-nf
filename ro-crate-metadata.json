@@ -112,6 +112,33 @@
       "identifier": "https://orcid.org/0000-0003-0419-1476"
     },
     {
+      "@id": "https://workflowhub.eu/people/123",
+      "@type": "Person",
+      "name": "Georgina Samaha"
+    },
+    {
+      "@id": "https://orcid.org/0000-0001-8449-1502",
+      "@type": "Person",
+      "name": "Cali Willet",
+      "identifier": "https://orcid.org/0000-0001-8449-1502"
+    },
+    {
+      "@id": "https://workflowhub.eu/people/258",
+      "@type": "Person",
+      "name": "Cali Willet"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-4019-7026",
+      "@type": "Person",
+      "name": "Frederick Jaya",
+      "identifier": "https://orcid.org/0000-0002-4019-7026"
+    },
+    {
+      "@id": "https://workflowhub.eu/people/1217",
+      "@type": "Person",
+      "name": "Frederick Jaya"
+    },
+    {
       "@id": "https://workflowhub.eu/projects/43",
       "@type": [
         "Project",
