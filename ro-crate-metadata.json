@@ -75,9 +75,17 @@
       "keywords": "Bioinformatics, INDELs, SNPs, variant calling, Genomics, whole genome sequencing, gpu, Annotation, mapping",
       "version": 1,
       "license": "https://spdx.org/licenses/GPL-3.0",
-      "creator": {
-        "@id": "https://workflowhub.eu/people/123"
-      },
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0003-0419-1476"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-8449-1502"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4019-7026"
+        }
+      ],
       "producer": {
         "@id": "https://workflowhub.eu/projects/43"
       },
@@ -102,11 +110,6 @@
       "@type": "Person",
       "name": "Georgina Samaha",
       "identifier": "https://orcid.org/0000-0003-0419-1476"
-    },
-    {
-      "@id": "https://workflowhub.eu/people/123",
-      "@type": "Person",
-      "name": "Georgina Samaha"
     },
     {
       "@id": "https://workflowhub.eu/projects/43",
