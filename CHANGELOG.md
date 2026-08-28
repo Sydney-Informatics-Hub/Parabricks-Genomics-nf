@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.1.0] - 2026-08-28
 
 ### Added
 - Optional `--bwa_index` parameter to point at a prebuilt BWA index directory and skip the `bwa_index` step (`nextflow.config`, `main.nf`, `nextflow_schema.json`, README). Useful when the reference lives in a read-only directory that cannot hold a colocated index.
