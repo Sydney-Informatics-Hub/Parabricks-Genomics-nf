@@ -11,7 +11,7 @@ process extract_flowcell_lane {
     """
     #!/usr/bin/bash
 
-    fq_header=\$(gzip -dc "${fq1}" | sed -n '1p')
+    fq_header=\$(gzip -dc "${fq1}" | sed -n '1{p;q}')
     echo "\$fq_header" | cut -d':' -f3 > flowcell.txt
     echo "\$fq_header" | cut -d':' -f4 > lane.txt
     """

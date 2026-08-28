@@ -40,6 +40,7 @@ process pb_fq2bam {
           --bwa-options="-M" \\
           --fix-mate \\
           --optical-duplicate-pixel-distance 2500 \\
+          --low-memory \\
           --logfile ${sample}_pbrun_fq2bam_log.txt \\
           ${args}
     """

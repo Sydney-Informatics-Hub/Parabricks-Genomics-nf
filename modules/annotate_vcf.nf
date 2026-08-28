@@ -13,7 +13,7 @@ process annotate_vcf {
 
     output:
     path ("${params.cohort_name}_annotated.gz"), emit: vep_annotations
-    path ("${params.cohort_name}_annotated.gz_warnings.txt"), emit: vep_warnings
+    path ("${params.cohort_name}_annotated.gz_warnings.txt"), emit: vep_warnings, optional: true
     path ("${params.cohort_name}_annotated.gz_summary.html"), emit: vep_report
 
     script:

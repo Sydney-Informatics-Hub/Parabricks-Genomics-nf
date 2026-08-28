@@ -35,6 +35,7 @@ Workflow run parameters
 \033[32mreference\033[0m          : ${params.ref}
 \033[32mvep_species\033[0m        : ${params.vep_species}
 \033[32mvep_assembly\033[0m       : ${params.vep_assembly}
+\033[32mexome_mode\033[0m         : ${params.exome}
 \033[32mworkDir\033[0m            : ${workflow.workDir}
 
 \033[1m\033[33m=======================================================================================
@@ -75,9 +76,13 @@ def helpMessage() {
 
   \033[34m--download_vep_cache\033[0m  Download the required cache (default: false).
 
+  \033[34m--vep_cache\033[0m           Path to a prebuilt VEP cache dir (contains <species>/<version>_<assembly>). Skips download when set.
+
   \033[34m--vep_species\033[0m         Specify which species cache to download from VEP (default: false).
 
   \033[34m--vep_assembly\033[0m        Specify which assembly cache to download from VEP (default: false).
+
+  \033[34m--exome\033[0m               Run joint-genotyping with the exome (WES) GLnexus preset instead of WGS (default: false).
 
 """.stripIndent()
 }
@@ -106,9 +111,14 @@ def refFile = file(params.ref)
 def refDir = refFile.parent
 def refName = refFile.name
 
-bwa_index_ch = file("${refDir}/${refName}.bwt").exists() ?
-    Channel.value(file("${refDir}/${refName}.*")) :
-    // If doesn't exist run indexing 
+bwa_index_ch =
+    // Prefer an explicitly provided prebuilt index (decoupled from a read-only ref dir)
+    params.bwa_index ?
+        Channel.value(file("${params.bwa_index}/*")) :
+    // Otherwise reuse an index colocated next to the reference FASTA
+    file("${refDir}/${refName}.bwt").exists() ?
+        Channel.value(file("${refDir}/${refName}.*")) :
+    // If neither exists, build it
     bwa_index(refFile).fa_index
 
 // VALIDATE INPUT SAMPLES 
@@ -140,21 +150,23 @@ fastqc_in = parsed_reads_ch
 fastqc(fastqc_in)
 
 align_in = parsed_reads_ch
-  // Group by sample, platform, library, center, flowcell, lane
-  // For samples with multiple fastq read pairs, these will be passed into
-  // pb_fq2bam while retaining read pairs are grouped correctly
-  .map { sample, fq1, fq2, platform, library, center, flowcell, lane -> 
+  // Group by sample, platform, library, center only (NOT flowcell/lane) so that
+  // all read pairs for a sample are merged into a single pb_fq2bam call, one
+  // sample producing one BAM. Grouping by flowcell/lane too would split each
+  // lane into its own group, causing pb_fq2bam/pb_deepvariant to run once per
+  // lane and produce multiple identically-named gvcfs for the same sample.
+  .map { sample, fq1, fq2, platform, library, center, flowcell, lane ->
     [
       [fq1, fq2], // paired fqs
-      sample, 
-      platform, 
-      library, 
-      center, 
-      flowcell, 
-      lane 
+      sample,
+      platform,
+      library,
+      center,
+      flowcell,
+      lane
     ]
   }
-  .groupTuple(by:[1, 2, 3, 4, 5, 6, 7])
+  .groupTuple(by:[1, 2, 3, 4])
 
 // ALIGN READS
 pb_fq2bam(align_in, refFile, bwa_index_ch)
@@ -179,20 +191,26 @@ bcftools_convert(glnexus_joint_call.out.cohort_bcf)
 // QC SUMMARY OF ALL SAMPLES IN COHORT VCF 
 bcftools_stats(bcftools_convert.out.cohort_vcf, bcftools_convert.out.cohort_vcf_tbi)
 
-// DOWNLOAD VEP CACHE AND ANNOTATE WITH DOWNLOADED CACHE
-if (params.download_vep_cache){
+// ANNOTATE COHORT VCF WITH VEP
+// Prefer an explicitly provided prebuilt cache; otherwise download when requested
+run_vep = params.vep_cache ? true : params.download_vep_cache
 
-	download_vep(params.vep_assembly, params.vep_species) 
-  annotate_vcf(params.cohort_name, 
-              bcftools_convert.out.cohort_vcf, 
-              bcftools_convert.out.cohort_vcf_tbi,  
-              params.vep_assembly, 
+if (run_vep){
+
+  vep_cache_ch = params.vep_cache ?
+      Channel.value(file(params.vep_cache, checkIfExists: true)) :
+      download_vep(params.vep_assembly, params.vep_species).cache
+
+  annotate_vcf(params.cohort_name,
+              bcftools_convert.out.cohort_vcf,
+              bcftools_convert.out.cohort_vcf_tbi,
+              params.vep_assembly,
               params.vep_species,
-              download_vep.out.cache)
+              vep_cache_ch)
 }
 
 // GENERATE MULTIQC REPORT
-vep_report_ch = params.download_vep_cache ? annotate_vcf.out.vep_report : Channel.empty()
+vep_report_ch = run_vep ? annotate_vcf.out.vep_report : Channel.empty()
 
 multiqc_in = fastqc.out.fastqc_results
           .concat(pb_fq2bam.out.qc_metrics, 

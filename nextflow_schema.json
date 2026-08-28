@@ -39,11 +39,25 @@
                     "description": "Path to reference genome.",
                     "help_text": "A reference genome FASTA file. Species with a public reference genome can be downloaded from [Ensembl](https://asia.ensembl.org/info/data/ftp/index.html), [UCSC](https://genome.ucsc.edu/goldenPath/help/ftp.html), or [NCBI](https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/) ftp sites. "
                 },
+                "bwa_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder",
+                    "description": "Path to a directory containing a prebuilt BWA index for the reference.",
+                    "help_text": "Optional. Directory holding the `.amb`, `.ann`, `.bwt`, `.pac`, `.sa` files whose basenames match the `--ref` FASTA. If provided, the pipeline skips the `bwa_index` step entirely. If omitted, the pipeline reuses an index colocated next to the reference FASTA, or builds one if none exists."
+                },
                 "cohort_name": {
                     "type": "string",
                     "default": "cohort",
                     "description": "Name of prefix for the joint called VCF file.",
                     "fa_icon": "fas fa-address-card"
+                },
+                "exome": {
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-dna",
+                    "description": "Run variant calling and joint-genotyping with exome (WES) presets instead of the default whole-genome (WGS) presets.",
+                    "help_text": "Set this when your cohort is whole-exome sequencing data. Runs `pbrun deepvariant` with `--use-wes-model` (plus `--disable-small-model` from Parabricks 4.7.0 onwards), and switches `glnexus_cli --config` from `DeepVariantWGS` to `DeepVariantWES`, matching Google DeepVariant's documented WES behaviour (see https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches). Has no effect on alignment."
                 }
             }
         },
@@ -86,6 +100,13 @@
                     "fa_icon": "fas fa-download",
                     "description": "Download annotation cache.",
                     "help_text": "For available species caches, please see the [VEP download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify."
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder",
+                    "description": "Path to a directory containing a prebuilt VEP cache.",
+                    "help_text": "Optional. Directory containing the VEP cache in `<species>/<version>_<assembly>` layout (e.g. `homo_sapiens/110_GRCh38`). If provided, the pipeline annotates against this local cache and skips the `download_vep` step. Avoids re-downloading the large cache each run."
                 },
                 "vep_species": {
                     "type": "string",

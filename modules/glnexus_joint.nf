@@ -20,7 +20,7 @@ process glnexus_joint_call {
     echo ${gvcf_list} | tr ' ' '\n' > glnexus_list
     
     glnexus_cli \
-      --config DeepVariantWGS \
+      --config ${params.exome ? 'DeepVariantWES' : 'DeepVariantWGS'} \
       --threads ${task.cpus} \
       --list glnexus_list \
       > ${params.cohort_name}.bcf \

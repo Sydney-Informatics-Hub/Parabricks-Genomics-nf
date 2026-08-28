@@ -126,6 +126,14 @@ When you run the pipeline, you will use the mandatory `--ref` parameter to speci
 --ref /path/to/reference.fasta
 ```
 
+Indexing hg38 takes ~1 hour of walltime and is deterministic, so it is wasteful to rebuild it on every run. If you already have a prebuilt BWA index (for example built once and stored in a writable location, or when the reference directory itself is read-only), point the pipeline at it with the optional `--bwa_index` parameter to skip the `bwa_index` step entirely:
+
+```
+--bwa_index /path/to/index_dir
+```
+
+The directory must contain the `.amb`, `.ann`, `.bwt`, `.pac`, `.sa` files whose basenames match the `--ref` FASTA (e.g. `reference.fasta.bwt`). If `--bwa_index` is omitted, the pipeline reuses an index colocated next to the reference FASTA, and only builds one if none exists.
+
 #### 2.2 Variant effect predictor cache 
 
 An optional feature of this workflow is to annotate output variants with Ensembl's [Variant Effect Predictor](https://asia.ensembl.org/info/docs/tools/vep/index.html). You can opt to download the required cache using the `--download_vep_cache` flag, additionally specifying the species and assembly you require: 
@@ -137,6 +145,16 @@ An optional feature of this workflow is to annotate output variants with Ensembl
 ```
 
 For available species caches, please see the [VEP cache download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify. Please keep in mind that VEP requires you to specify species and assembly as they are named in these files.  
+
+The VEP cache is large (~21 GB for hg38) and deterministic, so it is wasteful to re-download it on every run. If you already have a prebuilt cache (for example downloaded once and stored in a writable location), point the pipeline at it with the optional `--vep_cache` parameter to skip the download step:
+
+```bash
+--vep_cache /path/to/vep_cache
+--vep_species homo_sapiens
+--vep_assembly GRCh38
+```
+
+The directory must contain the cache in `<species>/<version>_<assembly>` layout (e.g. `homo_sapiens/110_GRCh38`). When `--vep_cache` is set, annotation runs against the local cache and `--download_vep_cache` is not required.
 
 ### 3. Run the pipeline 
 
@@ -175,6 +193,21 @@ nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <accou
 ```
 
 The pipeline automatically adjusts the queue, CPU, and memory allocations based on the version you specify. The Parabricks version used in a run is recorded in the startup log and in each GPU task's `.command.log`, and is correctly reflected in the MultiQC report.
+
+#### Running on exome (WES) data
+
+If your cohort is whole-exome sequencing data, add the `--exome` flag:
+
+```bash
+nextflow run main.nf --input sample.csv --ref /path/to/ref --gadi_account <account-code> -profile gadi --exome
+```
+
+This changes two steps to match Google DeepVariant's documented WES behaviour ([NVIDIA source-of-mismatches notes](https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches)):
+
+* `pbrun deepvariant` runs with `--use-wes-model` instead of the default WGS model. `--disable-small-model` is also added when `--parabricks_version` is 4.7.0 or later, since earlier Parabricks releases reject that flag as unrecognised.
+* GLnexus joint-genotyping uses the `DeepVariantWES` config instead of `DeepVariantWGS`
+
+Alignment (`fq2bam`) is unaffected by capture design and runs the same for WGS and WES.
 
 Additionally, you can run variant annotation using variant effect predictor by adding some additional flags `--download_vep_cache`, `--vep_species`, and `--vep_assembly` as specified in [section 2.2](#22-variant-effect-predictor-cache) above: 
 

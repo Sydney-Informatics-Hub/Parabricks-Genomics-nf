@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-08-28
+
+### Added
+- Optional `--bwa_index` parameter to point at a prebuilt BWA index directory and skip the `bwa_index` step (`nextflow.config`, `main.nf`, `nextflow_schema.json`, README). Useful when the reference lives in a read-only directory that cannot hold a colocated index.
+- Optional `--vep_cache` parameter to point at a prebuilt VEP cache directory (containing `<species>/<version>_<assembly>`) and skip the `download_vep` step (`nextflow.config`, `main.nf`, `nextflow_schema.json`, README). When set, annotation runs against the local cache; otherwise the `--download_vep_cache` download path is used. Avoids re-downloading the ~21 GB cache each run.
+- Optional `--exome` parameter for whole-exome (WES) cohorts (`nextflow.config`, `modules/glnexus_joint.nf`, `modules/pb_deepvar.nf`, `main.nf`, `nextflow_schema.json`, README). When set: GLnexus joint-genotyping uses the `DeepVariantWES` preset instead of `DeepVariantWGS`, and `pbrun deepvariant` runs with `--use-wes-model` (plus `--disable-small-model` from Parabricks 4.7.0 onwards, which rejects that flag on earlier versions) to match Google DeepVariant's WES behaviour (see [NVIDIA's source-of-mismatches notes](https://docs.nvidia.com/clara/parabricks/tool-reference/tools/deepvariant#source-of-mismatches)).
+
+### Fixed
+- `extract_flowcell_lane` no longer decompresses the entire FASTQ to read the header. `sed -n '1p'` read stdin to EOF, forcing `gzip -dc` through the whole ~30 GB file (~46–50 min per sample); changed to `sed -n '1{p;q}'` so decompression stops after the first line (sub-second).
+- `align_in` channel grouping in `main.nf` grouped by `flowcell`/`lane` in addition to `sample`/`platform`/`library`/`center`, splitting each lane of a multi-lane sample into its own `pb_fq2bam`/`pb_deepvariant` call. This produced multiple identically-named per-sample gVCFs, causing an "input file name collision" error in `glnexus_joint_call` for any sample with more than one fastq pair. Grouping now excludes `flowcell`/`lane` so all lanes for a sample merge into a single alignment/calling call, as `pb_fq2bam` already expected (`paired_fqs` accepted as a list of read pairs).
+
+## [3.0.0] - 2026-06-05
+
+### Added
+- `--parabricks_version` parameter to select the Parabricks release and target GPU queue: `4.6.0` (dgxa100 / A100, default) or `4.3.2` (gpuvolta / V100). Invalid values are rejected at startup (`main.nf`, `nextflow_schema.json`).
+- Selected version is printed in the run header and help text, and echoed as a runtime check inside `pb_fq2bam`, `pb_deepvariant`, and `pb_collectmetrics`.
+- MultiQC report now records the Parabricks version used at runtime (`modules/multiqc.nf`).
+
+### Changed
+- GPU queue, CPU, and memory allocations are now derived from `--parabricks_version` instead of being hardcoded: gpuvolta uses `task.gpus * 12` CPUs and 95 GB (collectmetrics), dgxa100 uses `task.gpus * 16` CPUs and 190 GB (`config/modules.config`).
+- Parabricks module load is selected by version (`parabricks/4.3.2` vs `parabricks/4.6.0`) in `config/gadi.config`.
+- README updated with a per-version queue/GPU/resource table and usage examples.
+
 ## [2.0.2] - 2026-05-20
 
 ### Added
