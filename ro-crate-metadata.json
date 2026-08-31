@@ -8,44 +8,35 @@
         "@id": "./"
       },
       "conformsTo": [
-        {
-          "@id": "https://w3id.org/ro/crate/1.3"
-        },
-        {
-          "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
-        }
+        { "@id": "https://w3id.org/ro/crate/1.3" }
       ]
-    },
-    {
-      "@id": "ro-crate-preview.html",
-      "@type": "CreativeWork",
-      "about": {
-        "@id": "./"
-      }
     },
     {
       "@id": "./",
       "@type": "Dataset",
+      "name": "Genomics001: Parabricks-Genomics-nf",
+      "description": "GPU-enabled pipeline for alignment and germline short variant calling for short-read sequencing data, using NVIDIA Clara Parabricks (BWA-MEM, DeepVariant), FastQC/MultiQC for quality evaluation, and GLnexus for scalable joint genotyping, with optional VEP annotation. Currently configured specifically for NCI's Gadi HPC.",
+      "license": { "@id": "https://spdx.org/licenses/GPL-3.0-only.html" },
+      "conformsTo": [
+        { "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.1" }
+      ],
       "mainEntity": {
         "@id": "main.nf"
       },
-      "datePublished": "2024-04-02 04:25:38 +0100",
       "author": [
-        {
-          "@id": "https://orcid.org/0000-0003-0419-1476"
-        }
+        { "@id": "https://orcid.org/0000-0003-0419-1476" },
+        { "@id": "https://orcid.org/0000-0001-8449-1502" },
+        { "@id": "https://orcid.org/0000-0002-4019-7026" }
       ],
-      "license": "https://spdx.org/licenses/GPL-3.0",
-      "identifier": "https://doi.org/10.48546/workflowhub.workflow.836.1",
-      "url": "https://workflowhub.eu/workflows/836/ro_crate?version=1",
-      "name": "Research Object Crate for Parabricks-Genomics-nf",
-      "description": "Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/4.2.0/index.html) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. \n\nNVIDIA's Clara Parabricks can deliver a significant speed improvement over traditional CPU-based methods, and is designed to be used only with NVIDIA GPUs. This pipeline is suitable for population screening projects as it executes Parabrick's implementations of BWA mem for short read alignment and Google's DeepVariant for short variant calling. Additionally, it uses standard CPU implementations of data quality evaluation tools [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) and [DNAnexus' GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144) for scalable gVCF merging and joint variant calling. Optionally, [Variant Effect Predictor (VEP)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4) can be run for variant annotation. \n",
-      "isBasedOn": "https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf.git",
-      "sdDatePublished": "2026-08-28 05:07:34 +0100",
+      "keywords": "nextflow, genomics, parabricks, gpu, variant-calling, deepvariant, bioinformatics",
       "hasPart": [
-        {
-          "@id": "main.nf"
-        }
+        { "@id": "main.nf" },
+        { "@id": "nextflow.config" },
+        { "@id": "README.md" },
+        { "@id": "LICENSE" },
+        { "@id": "CITATION.cff" },
+        { "@id": "assets/parabricks-genomics-flowchart.png" },
+        { "@id": "modules/" }
       ]
     },
     {
@@ -55,76 +46,119 @@
         "SoftwareSourceCode",
         "ComputationalWorkflow"
       ],
-      "contentSize": 6413,
+      "name": "Genomics001: Parabricks-Genomics-nf",
       "programmingLanguage": {
-        "@id": "#nextflow"
+        "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
       },
-      "dct:conformsTo": {
-        "@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/"
-      },
-      "description": "Parabricks-Genomics-nf is a GPU-enabled pipeline for alignment and germline short variant calling for short read sequencing data. The pipeline utilises [NVIDIA's Clara Parabricks](https://docs.nvidia.com/clara/parabricks/4.2.0/index.html) toolkit to dramatically speed up the execution of best practice bioinformatics tools. Currently, this pipeline is **configured specifically for [NCI's Gadi HPC](https://nci.org.au/our-systems/hpc-systems)**. \n\nNVIDIA's Clara Parabricks can deliver a significant speed improvement over traditional CPU-based methods, and is designed to be used only with NVIDIA GPUs. This pipeline is suitable for population screening projects as it executes Parabrick's implementations of BWA mem for short read alignment and Google's DeepVariant for short variant calling. Additionally, it uses standard CPU implementations of data quality evaluation tools [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) and [DNAnexus' GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144) for scalable gVCF merging and joint variant calling. Optionally, [Variant Effect Predictor (VEP)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4) can be run for variant annotation. \n",
-      "name": "Parabricks-Genomics-nf",
-      "url": "https://workflowhub.eu/workflows/836?version=1",
-      "keywords": "Bioinformatics, INDELs, SNPs, variant calling, Genomics, whole genome sequencing, gpu, Annotation, mapping",
-      "version": 1,
-      "license": "https://spdx.org/licenses/GPL-3.0",
-      "creator": {
-        "@id": "https://workflowhub.eu/people/123"
-      },
-      "contributor": {
-        "@id": "https://workflowhub.eu/people/123"
-      },
-      "producer": {
-        "@id": "https://workflowhub.eu/projects/43"
-      },
-      "dateCreated": "2024-04-25T23:19:53Z",
-      "dateModified": "2026-05-13T12:52:41Z",
-      "isPartOf": [],
-      "identifier": "https://doi.org/10.48546/workflowhub.workflow.836.1",
-      "datePublished": "2024-04-25T23:20:08Z",
-      "citation": [],
-      "input": [],
-      "output": [],
+      "creator": [
+        { "@id": "https://orcid.org/0000-0003-0419-1476" },
+        { "@id": "https://orcid.org/0000-0001-8449-1502" },
+        { "@id": "https://orcid.org/0000-0002-4019-7026" }
+      ],
+      "dateCreated": "2023-08-04",
+      "license": { "@id": "https://spdx.org/licenses/GPL-3.0-only.html" },
+      "url": "https://github.com/Sydney-Informatics-Hub/Parabricks-Genomics-nf",
+      "version": "3.1.0",
       "sdPublisher": {
         "@id": "https://about.workflowhub.eu/"
       },
-      "documentation": []
+      "image": {
+        "@id": "assets/parabricks-genomics-flowchart.png"
+      },
+      "conformsTo": [
+        { "@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE" }
+      ]
+    },
+    {
+      "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
+      "@type": "ComputerLanguage",
+      "name": "Nextflow",
+      "identifier": "https://www.nextflow.io/",
+      "url": "https://www.nextflow.io/"
     },
     {
       "@id": "https://orcid.org/0000-0003-0419-1476",
       "@type": "Person",
       "name": "Georgina Samaha",
-      "identifier": "https://orcid.org/0000-0003-0419-1476"
+      "identifier": "https://orcid.org/0000-0003-0419-1476",
+      "affiliation": { "@id": "#sih" }
     },
     {
-      "@id": "https://workflowhub.eu/people/123",
+      "@id": "https://orcid.org/0000-0001-8449-1502",
       "@type": "Person",
-      "name": "Georgina Samaha"
+      "name": "Cali Willet",
+      "identifier": "https://orcid.org/0000-0001-8449-1502",
+      "affiliation": { "@id": "#sih" }
     },
     {
-      "@id": "https://workflowhub.eu/projects/43",
-      "@type": [
-        "Project",
-        "Organization"
-      ],
-      "name": "Sydney Informatics Hub"
+      "@id": "https://orcid.org/0000-0002-4019-7026",
+      "@type": "Person",
+      "name": "Frederick Jaya",
+      "identifier": "https://orcid.org/0000-0002-4019-7026",
+      "affiliation": { "@id": "#sih" }
     },
     {
-      "@id": "#nextflow",
-      "@type": "ComputerLanguage",
-      "name": "Nextflow",
-      "identifier": {
-        "@id": "https://www.nextflow.io/"
-      },
-      "url": {
-        "@id": "https://www.nextflow.io/"
-      }
-    },
-    {
-      "@id": "https://about.workflowhub.eu/",
+      "@id": "#sih",
       "@type": "Organization",
-      "name": "WorkflowHub",
-      "url": "https://about.workflowhub.eu/"
-    }
+      "name": "Sydney Informatics Hub, University of Sydney"
+    },
+    {
+      "@id": "assets/parabricks-genomics-flowchart.png",
+      "@type": ["File", "ImageObject"],
+      "name": "Parabricks-Genomics-nf workflow diagram"
+    },
+    {
+      "@id": "README.md",
+      "@type": "File",
+      "about": { "@id": "./" },
+      "encodingFormat": "text/markdown"
+    },
+    {
+      "@id": "LICENSE",
+      "@type": "File",
+      "name": "GPL-3.0 license text"
+    },
+    {
+      "@id": "CITATION.cff",
+      "@type": "File",
+      "name": "Citation metadata",
+      "encodingFormat": "application/x-yaml"
+    },
+    {
+      "@id": "nextflow.config",
+      "@type": "File",
+      "name": "Nextflow pipeline configuration"
+    },
+    {
+      "@id": "modules/",
+      "@type": "Dataset",
+      "name": "Pipeline process modules",
+      "hasPart": [
+        { "@id": "modules/annotate_vcf.nf" },
+        { "@id": "modules/bwa_index.nf" },
+        { "@id": "modules/convert_bcf.nf" },
+        { "@id": "modules/download_vep.nf" },
+        { "@id": "modules/extract_flowcell_lane.nf" },
+        { "@id": "modules/fastqc.nf" },
+        { "@id": "modules/glnexus_joint.nf" },
+        { "@id": "modules/multiqc.nf" },
+        { "@id": "modules/pb_collectmetrics.nf" },
+        { "@id": "modules/pb_deepvar.nf" },
+        { "@id": "modules/pb_fq2bam.nf" },
+        { "@id": "modules/vcf_stats.nf" }
+      ]
+    },
+    { "@id": "modules/annotate_vcf.nf", "@type": "File" },
+    { "@id": "modules/bwa_index.nf", "@type": "File" },
+    { "@id": "modules/convert_bcf.nf", "@type": "File" },
+    { "@id": "modules/download_vep.nf", "@type": "File" },
+    { "@id": "modules/extract_flowcell_lane.nf", "@type": "File" },
+    { "@id": "modules/fastqc.nf", "@type": "File" },
+    { "@id": "modules/glnexus_joint.nf", "@type": "File" },
+    { "@id": "modules/multiqc.nf", "@type": "File" },
+    { "@id": "modules/pb_collectmetrics.nf", "@type": "File" },
+    { "@id": "modules/pb_deepvar.nf", "@type": "File" },
+    { "@id": "modules/pb_fq2bam.nf", "@type": "File" },
+    { "@id": "modules/vcf_stats.nf", "@type": "File" }
   ]
 }
