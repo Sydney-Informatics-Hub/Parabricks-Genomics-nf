@@ -12,7 +12,10 @@ include { glnexus_joint_call } from './modules/glnexus_joint'
 include { bcftools_convert } from './modules/convert_bcf'
 include { bcftools_stats } from './modules/vcf_stats'
 include { download_vep } from './modules/download_vep'
+include { vcf_contigs } from './modules/vcf_contigs'
+include { split_vcf } from './modules/split_vcf'
 include { annotate_vcf } from './modules/annotate_vcf'
+include { concat_vcf } from './modules/concat_vcf'
 include { multiqc } from './modules/multiqc'
 
 // Print a header upon execution 
@@ -201,15 +204,46 @@ if (run_vep){
       Channel.value(file(params.vep_cache, checkIfExists: true)) :
       download_vep(params.vep_assembly, params.vep_species).cache
 
-  annotate_vcf(params.cohort_name,
-              bcftools_convert.out.cohort_vcf,
-              bcftools_convert.out.cohort_vcf_tbi,
-              params.vep_assembly,
+  // VEP needs an explicit FASTA in offline mode. Default to the same reference the
+  // variants were called against so contigs and alleles cannot drift.
+  vep_fasta = file(params.vep_fasta ?: params.ref, checkIfExists: true)
+  vep_fasta_ch = Channel.value([vep_fasta, file("${vep_fasta}.fai", checkIfExists: true)])
+
+  if (params.vep_scatter) {
+    // Split by contig, annotate shards in parallel, concatenate in contig order
+    contigs_ch = vcf_contigs(bcftools_convert.out.cohort_vcf,
+                            bcftools_convert.out.cohort_vcf_tbi).contigs
+
+    shards_ch = contigs_ch
+        .splitText()
+        .map { it.trim() }
+        .filter { it }
+        .combine(bcftools_convert.out.cohort_vcf)
+        .combine(bcftools_convert.out.cohort_vcf_tbi)
+
+    annotate_in = split_vcf(shards_ch).shard
+  }
+  else {
+    annotate_in = bcftools_convert.out.cohort_vcf
+        .combine(bcftools_convert.out.cohort_vcf_tbi)
+        .map { vcf, tbi -> [params.cohort_name, vcf, tbi] }
+  }
+
+  annotate_vcf(annotate_in,
               params.vep_species,
-              vep_cache_ch)
+              params.vep_assembly,
+              vep_cache_ch,
+              vep_fasta_ch)
+
+  if (params.vep_scatter) {
+    concat_vcf(contigs_ch,
+              annotate_vcf.out.vep_annotations.map { _c, vcf, _tbi -> vcf }.collect(),
+              annotate_vcf.out.vep_annotations.map { _c, _vcf, tbi -> tbi }.collect())
+  }
 }
 
 // GENERATE MULTIQC REPORT
+// One VEP summary per shard when scattering; MultiQC's VEP module handles them all
 vep_report_ch = run_vep ? annotate_vcf.out.vep_report : Channel.empty()
 
 multiqc_in = fastqc.out.fastqc_results
