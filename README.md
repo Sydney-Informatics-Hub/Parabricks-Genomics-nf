@@ -144,9 +144,9 @@ An optional feature of this workflow is to annotate output variants with Ensembl
 --vep_assembly GRCh38
 ```
 
-For available species caches, please see the [VEP cache download site](https://ftp.ensembl.org/pub/release-111/variation/vep/) to determine which species and assembly you need to specify. Please keep in mind that VEP requires you to specify species and assembly as they are named in these files.  
+For available species caches, please see the [VEP cache download site](https://ftp.ensembl.org/pub/release-116/variation/indexed_vep_cache/) to determine which species and assembly you need to specify. Please keep in mind that VEP requires you to specify species and assembly as they are named in these files.  
 
-The VEP cache is large (~21 GB for hg38) and deterministic, so it is wasteful to re-download it on every run. If you already have a prebuilt cache (for example downloaded once and stored in a writable location), point the pipeline at it with the optional `--vep_cache` parameter to skip the download step:
+The VEP cache is large (~26 GB for hg38) and deterministic, so it is wasteful to re-download it on every run. If you already have a prebuilt cache (for example downloaded once and stored in a writable location), point the pipeline at it with the optional `--vep_cache` parameter to skip the download step:
 
 ```bash
 --vep_cache /path/to/vep_cache
@@ -217,7 +217,9 @@ nextflow run main.nf --input <samplesheet.csv> --ref <ref.fasta> --download_vep_
 
 In addition to all steps above, this will run: 
 * [VEP download](https://asia.ensembl.org/info/docs/tools/vep/script/vep_cache.html) to collect the cache required for variant annotation
-* [VEP annotate](https://asia.ensembl.org/info/docs/tools/vep/script/vep_options.html) to annotate the cohort VCF with downloade cache data
+* [VEP annotate](https://asia.ensembl.org/info/docs/tools/vep/script/vep_options.html) to annotate the cohort VCF with downloaded cache data
+
+By default annotation is scattered by contig and the shards are concatenated afterwards, which keeps each job short and makes reruns cheap. Set `--vep_scatter false` to annotate the cohort VCF in a single job instead.
 
 You will need to identify which species and assembly you require for the VEP cache download. See [section 2.2](#22-variant-effect-predictor-cache) above for instructions on how to do this. For example, running on a human dataset, aligned to the GRCh38 reference genome, you would use the following command: 
 
@@ -281,7 +283,7 @@ To run this pipeline you must have Nextflow and Singularity installed. All other
 |FastQC       |0.12.1            |
 |Glnexus      |0.2.7             |
 |MultiQC      |1.21              |
-|VEP          |110.1             |
+|VEP          |116.2             |
 
 
 
