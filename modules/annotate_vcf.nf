@@ -1,7 +1,10 @@
 process annotate_vcf {
     tag "ANNOTATE: ${shard}"
-    publishDir "${params.outdir}/annotations", mode: 'symlink'
-    container "${params.vep_container}"
+    // Shards go to a subdirectory; when not scattering this process produces the
+    // final output, so it publishes alongside it instead.
+    publishDir { params.vep_scatter ? "${params.outdir}/annotations/shards"
+                                    : "${params.outdir}/annotations" }, mode: 'symlink'
+    container 'quay.io/biocontainers/ensembl-vep:116.2--pl5321h2a3209d_0'
 
     input:
     tuple val(shard), path(vcf), path(tbi)
@@ -16,8 +19,8 @@ process annotate_vcf {
     path ("${shard}_annotated.vcf.gz_summary.html"), emit: vep_report
 
     script:
-    // Add further VEP options with `withName: annotate_vcf { ext.args = '...' }`
-    def args = task.ext.args ?: ''
+    // Add further VEP options with `params.vep_extra_args`
+    def args = task.ext.args ?: (params.vep_extra_args ?: '')
     """
     vep \
         --input_file ${vcf} \
@@ -29,6 +32,7 @@ process annotate_vcf {
         --fork ${task.cpus} \
         --symbol --biotype --canonical --mane \
         --hgvs \
+        --protein --uniprot \
         --check_existing \
         --af_gnomade --af_gnomadg --max_af \
         ${args}
