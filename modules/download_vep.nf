@@ -1,7 +1,7 @@
 process download_vep {
     tag "DOWNLOADING_CACHE: ${params.vep_species} - ${params.vep_assembly}"
     publishDir "${params.outdir}/VEP_cache", mode: 'symlink'
-    container 'quay.io/lifebitaiorg/vep-nf:v110.1'
+    container 'quay.io/biocontainers/ensembl-vep:116.2--pl5321h2a3209d_0'
 
     input:
     val vep_assembly

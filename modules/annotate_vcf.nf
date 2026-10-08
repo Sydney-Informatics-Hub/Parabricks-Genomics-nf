@@ -1,32 +1,42 @@
 process annotate_vcf {
-    tag "COHORT: ${params.cohort_name}"
-    publishDir "${params.outdir}/annotations", mode: 'symlink'
-    container 'quay.io/lifebitaiorg/vep-nf:v110.1'
+    tag "ANNOTATE: ${shard}"
+    // Shards go to a subdirectory; when not scattering this process produces the
+    // final output, so it publishes alongside it instead.
+    publishDir { params.vep_scatter ? "${params.outdir}/annotations/shards"
+                                    : "${params.outdir}/annotations" }, mode: 'symlink'
+    container 'quay.io/biocontainers/ensembl-vep:116.2--pl5321h2a3209d_0'
 
     input:
-    val cohort_name
-    path cohort_vcf
-    path cohort_vcf_tbi
-    val vep_assembly
+    tuple val(shard), path(vcf), path(tbi)
     val vep_species
+    val vep_assembly
     path vep_cache
+    tuple path(fasta), path(fasta_fai)
 
     output:
-    path ("${params.cohort_name}_annotated.gz"), emit: vep_annotations
-    path ("${params.cohort_name}_annotated.gz_warnings.txt"), emit: vep_warnings, optional: true
-    path ("${params.cohort_name}_annotated.gz_summary.html"), emit: vep_report
+    tuple val(shard), path("${shard}_annotated.vcf.gz"), path("${shard}_annotated.vcf.gz.tbi"), emit: vep_annotations
+    path ("${shard}_annotated.vcf.gz_warnings.txt"), emit: vep_warnings, optional: true
+    path ("${shard}_annotated.vcf.gz_summary.html"), emit: vep_report
 
     script:
-    def args = task.ext.args ?: ''
+    // Add further VEP options with `params.vep_extra_args`
+    def args = task.ext.args ?: (params.vep_extra_args ?: '')
     """
-    vep -i ${params.cohort_name}.vcf.gz \
-        -o ${params.cohort_name}_annotated.gz \
-        ${args} \
-        --assembly ${params.vep_assembly} \
-        --species ${params.vep_species} \
-        --cache --offline \
-        --dir_cache vep_cache \
-        --compress_output bgzip \
-        --fork ${task.cpus} 
+    vep \
+        --input_file ${vcf} \
+        --output_file ${shard}_annotated.vcf.gz \
+        --vcf --compress_output bgzip \
+        --offline --cache --dir_cache ${vep_cache} \
+        --fasta ${fasta} \
+        --species ${vep_species} --assembly ${vep_assembly} \
+        --fork ${task.cpus} \
+        --symbol --biotype --canonical --mane \
+        --hgvs \
+        --protein --uniprot \
+        --check_existing \
+        --af_gnomade --af_gnomadg --max_af \
+        ${args}
+
+    tabix -p vcf ${shard}_annotated.vcf.gz
     """
 }
