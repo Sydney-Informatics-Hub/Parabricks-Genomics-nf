@@ -22,6 +22,10 @@ report_header_info:
 
 # Clean .gz extensions from the filenames
 # See: https://multiqc.info/docs/getting_started/config/#cleaning-extensions
+# Name FastQC samples by the (renamed) input file, not the name stored in the fastq
+use_filename_as_sample_name:
+  - fastqc
+
 fn_clean_exts:
   - ".gz"
 
